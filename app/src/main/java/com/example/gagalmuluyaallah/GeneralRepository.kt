@@ -29,7 +29,7 @@ class GeneralRepository private constructor(
     //@PARAM name
     //@PARAM email
     //@Param password
-    fun register(name: String, email: String, password: String): LiveData<ResultSealed<GeneralResponse>> = liveData {
+    fun registerGR(name: String, email: String, password: String): LiveData<ResultSealed<GeneralResponse>> = liveData {
         emit(ResultSealed.Loading)
         Log.d("GeneralRepository", "register: $name, $email, $password")
         try {
