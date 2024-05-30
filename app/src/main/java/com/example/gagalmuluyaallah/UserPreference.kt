@@ -28,7 +28,7 @@ class UserPreference private constructor(private val dataStore: DataStore<androi
         }
 
         // logout user
-        suspend fun userLogout(){
+        suspend fun userLogout(){ //this one is add to mainVM
             dataStore.edit { preferences ->
                 preferences[STATE_KEY] = false
                 preferences[TOKEN_KEY] = ""
