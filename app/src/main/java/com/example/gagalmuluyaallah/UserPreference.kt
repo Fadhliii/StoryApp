@@ -14,7 +14,7 @@ class UserPreference private constructor(private val dataStore: DataStore<androi
             }
         }
         // is user login or not
-        fun isLoggedin() = dataStore.data.map { preferences ->
+        fun isLoggedIn(): Flow<Boolean?> = dataStore.data.map { preferences ->
             preferences[STATE_KEY]
         }
 
@@ -28,10 +28,10 @@ class UserPreference private constructor(private val dataStore: DataStore<androi
         }
 
         // logout user
-        suspend fun userLogout(token: String){
+        suspend fun userLogout(){
             dataStore.edit { preferences ->
                 preferences[STATE_KEY] = false
-                preferences[TOKEN_KEY] = token
+                preferences[TOKEN_KEY] = ""
             }
         }
     companion object {
