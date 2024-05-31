@@ -2,7 +2,8 @@ package com.example.gagalmuluyaallah
 
 import androidx.lifecycle.ViewModel
 
-class RegisterViewModel(val repositoryRVM: GeneralRepository): ViewModel() {
-    fun registerGR(name:String, email:String, password:String) = repositoryRVM.registerGR(name, email, password)
+// this viewmodel is for register so it can split the ui and model
+class RegisterViewModel(val repository: GeneralRepository) : ViewModel() {
+    fun register(name: String, email: String, password: String) = repository.register(name, email, password)
 
 }

@@ -2,4 +2,9 @@
     <string name="app_name">gagalmuluyaallah</string>
     <string name="register">Register</string>
     <string name="email">Email</string>
+    <string name="empty_name">EmptyName\n</string>
+    <string name="empty_email">EmptyEmail\n</string>
+    <string name="empty_password">EmptyPassword\n</string>
+    <string name="password">Password</string>
+    <string name="password_empty">password empty</string>
 </resources>

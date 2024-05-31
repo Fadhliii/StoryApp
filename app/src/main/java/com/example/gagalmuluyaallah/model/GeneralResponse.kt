@@ -1,4 +1,4 @@
-package com.example.gagalmuluyaallah
+package com.example.gagalmuluyaallah.model
 
 import com.google.gson.annotations.SerializedName
 

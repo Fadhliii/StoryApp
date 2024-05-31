@@ -1,22 +1,34 @@
 package com.example.gagalmuluyaallah
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.gagalmuluyaallah.model.Injection
 
 @Suppress("UNCHECKED_CAST")
-class VMFactory (
+class VMFactory(
         private val repository: GeneralRepository,
-        private val userPreference: UserPreference
+        private val userPreference: UserPreference,
 ) : ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel> create(modelFactory: Class<T>):T {
-        when{
-            modelFactory.isAssignableFrom(MainVM::class.java) -> {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        when {
+            modelClass.isAssignableFrom(MainVM::class.java)            -> {
                 return MainVM(repository, userPreference) as T
             }
-            modelFactory.isAssignableFrom(MainVM::class.java) -> {
-                return RegisterViewModel(repository, userPreference) as T}
-
-            else -> throw IllegalArgumentException("Unkown / invalid VM class : " + modelFactory.name)
+            modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
+                return RegisterViewModel(repository) as T //it doesnt need userpref
+            } else                                                     -> throw IllegalArgumentException("Unknown / invalid VM class : " + modelClass.name)
         }
+    }
+
+
+    companion object {
+        // volatile is used to make sure that the value of instance is always up-to-date and the same to all execution thread
+        @Volatile
+        private var instance: VMFactory? = null
+        fun getInstance(context: Context, pref: UserPreference): VMFactory =
+                instance ?: synchronized(this) {
+                    instance ?: VMFactory(Injection.provideRepository(context), pref)
+                }.also { instance = it }
     }
 }

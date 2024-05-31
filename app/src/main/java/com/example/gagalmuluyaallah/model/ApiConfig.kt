@@ -1,4 +1,4 @@
-package com.example.gagalmuluyaallah
+package com.example.gagalmuluyaallah.model
 
 
 import okhttp3.OkHttpClient
@@ -18,18 +18,18 @@ object ApiConfig {
 
                 addInterceptor { chain ->
                     val request = chain.request().newBuilder()
-                        .addHeader("Authorization", "Bearer $token")
+                        .addHeader("Authorization", "Bearer $token") // tambahkan header untuk token login
                         .build()
                     chain.proceed(request)
                 }
             }
-            .readTimeout(25, TimeUnit.SECONDS)
-            .writeTimeout(300, TimeUnit.SECONDS)
-            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(25, TimeUnit.SECONDS) // 25 detik
+            .writeTimeout(150, TimeUnit.SECONDS) // 2,5 menit
+            .connectTimeout(60, TimeUnit.SECONDS) // 1 menit
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://story-api.dicoding.dev/v1")
+            .baseUrl("https://story-api.dicoding.dev/v1/")
             .client(okhttp)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

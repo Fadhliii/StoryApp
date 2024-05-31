@@ -3,6 +3,8 @@ package com.example.gagalmuluyaallah
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import com.example.gagalmuluyaallah.model.ApiService
+import com.example.gagalmuluyaallah.model.GeneralResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -18,7 +20,7 @@ class GeneralRepository private constructor(
     // get token from user preference
     //the method is called suspend because its need to wait until the token is ready
     // so it can run in the background
-    suspend fun getToken(): String? = token ?: runBlocking {
+    suspend fun getToken(): String? = token ?: runBlocking { //token is for the user login and stories related
         // runblocking is block the thread until the token is ready
         userPreference.getToken().first()
     }.also {
@@ -29,11 +31,11 @@ class GeneralRepository private constructor(
     //@PARAM name
     //@PARAM email
     //@Param password
-    fun registerGR(name: String, email: String, password: String): LiveData<ResultSealed<GeneralResponse>> = liveData {
+    fun register    (name: String, email: String, password: String): LiveData<ResultSealed<GeneralResponse>> = liveData {
         emit(ResultSealed.Loading)
         Log.d("GeneralRepository", "register: $name, $email, $password")
         try {
-            val response = apiService.doRegister(name, email, password)
+            val response = apiService.register(name, email, password)
             if (!response.error!!) {
                 emit(ResultSealed.Success(response))
                 Log.d("GeneralRepository", "register sukses: ${response.message}")
