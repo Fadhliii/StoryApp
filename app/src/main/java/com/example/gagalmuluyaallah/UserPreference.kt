@@ -7,33 +7,37 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class UserPreference private constructor(private val dataStore: DataStore<androidx.datastore.preferences.core.Preferences>){
-        suspend fun onLogin(){ //set user login
-            dataStore.edit { preferences ->
-                preferences[STATE_KEY] = true
-            }
+class UserPreference private constructor(private val dataStore: DataStore<androidx.datastore.preferences.core.Preferences>) {
+    suspend fun onLogin() { //set user login
+        dataStore.edit { preferences ->
+            preferences[STATE_KEY] = true
         }
-        // is user login or not
-        fun isLoggedIn(): Flow<Boolean?> = dataStore.data.map { preferences ->
-            preferences[STATE_KEY]
-        }
+    }
 
-        //get Token cuy
-        fun getToken(): Flow<String?> = dataStore.data.map { preferences ->
-            preferences[TOKEN_KEY]
-        }
-        //save token
-        fun saveToken(): Flow<String?> = dataStore.data.map { preferences ->
-            preferences[TOKEN_KEY]
-        }
+    // is user login or not
+    fun isLoggedIn(): Flow<Boolean?> = dataStore.data.map { preferences ->
+        preferences[STATE_KEY]
+    }
 
-        // logout user
-        suspend fun userLogout(){ //this one is add to mainVM
-            dataStore.edit { preferences ->
-                preferences[STATE_KEY] = false
-                preferences[TOKEN_KEY] = ""
-            }
+
+    //get Token cuy
+    fun getToken(): Flow<String?> = dataStore.data.map { preferences ->
+        preferences[TOKEN_KEY]
+    }
+
+    //save token
+    fun saveToken(): Flow<String?> = dataStore.data.map { preferences ->
+        preferences[TOKEN_KEY]
+    }
+
+    // logout user
+    suspend fun userLogout() { //this one is add to mainVM
+        dataStore.edit { preferences ->
+            preferences[STATE_KEY] = false
+            preferences[TOKEN_KEY] = ""
         }
+    }
+
     companion object {
         @Volatile
         private var INSTANCE: UserPreference? = null
