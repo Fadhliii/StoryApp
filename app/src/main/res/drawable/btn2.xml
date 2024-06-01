@@ -1,17 +1,15 @@
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true">
-        <shape>
-            <solid android:color="@color/green" />
-            <corners android:radius="6dp" />
-            <padding android:left="4dp" android:right="4dp" />
-        </shape>
-    </item>
-    <item>
-        <shape>
-            <solid android:color="@color/white" />
-            <corners android:radius="8dp" />
-            <padding android:left="4dp" android:right="4dp" />
-        </shape>
-    </item>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:shape="rectangle">
 
-</selector>
+    <gradient
+        android:angle="135"
+        android:centerColor="#0E534D"
+        android:endColor="#2A7A73"
+        android:startColor="#009688"
+        android:type="radial " />
+
+
+    <corners android:radius="40dp"></corners>
+</shape>

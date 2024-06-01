@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.gagalmuluyaallah.model.ApiService
 import com.example.gagalmuluyaallah.model.GeneralResponse
+import com.example.gagalmuluyaallah.model.LoginResponse
 import com.example.gagalmuluyaallah.model.LoginResult
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.first

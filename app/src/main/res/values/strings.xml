@@ -12,4 +12,6 @@
     <string name="welcome_message">Selamat datang di Aplikasi gajelas</string>
     <string name="email_invalid">Only email format\n</string>
     <string name="password_length">Password must contain more than 6 characters</string>
+    <string name="content_description_start_icon">username</string>
+    <string name="login">Login</string>
 </resources>
