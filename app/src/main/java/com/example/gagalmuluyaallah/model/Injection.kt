@@ -11,14 +11,12 @@ import com.example.gagalmuluyaallah.UserPreference
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_session")
 object Injection {
-
-    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_session")
     fun provideRepository(context: Context): GeneralRepository {
-        val prefInjection = UserPreference.getInstance(context.dataStore)
-        val token = runBlocking { prefInjection.getToken().first() }
+        val pref = UserPreference.getInstance(context.dataStore)
+        val token = runBlocking { pref.getToken().first() }
         val apiService = ApiConfig.getApiService(token.toString())
-        return GeneralRepository.getInstance(apiService, prefInjection)
+        return GeneralRepository.getInstance(apiService, pref)
     }
-
 }

@@ -1,6 +1,7 @@
 package com.example.gagalmuluyaallah.model
 
 
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -10,30 +11,31 @@ import java.util.concurrent.TimeUnit
 
 object ApiConfig {
     fun getApiService(token: String): ApiService {
-        val okhttp = OkHttpClient.Builder()
-            .apply {
-                val loggingInterceptor = HttpLoggingInterceptor()
-                loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-                addInterceptor(loggingInterceptor)
+        val BASEURL = "https://story-api.dicoding.dev/v1/" // Define BASEURL
+        val loggingInterceptor = if (BASEURL.isNotEmpty()) // Provide a condition
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        else
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.NONE)
 
-                addInterceptor { chain ->
-                    val request = chain.request().newBuilder()
-                        .addHeader("Authorization", "Bearer $token") // tambahkan header untuk token login
-                        .build()
-                    chain.proceed(request)
-                }
-            }
-            .readTimeout(25, TimeUnit.SECONDS) // 25 detik
-            .writeTimeout(150, TimeUnit.SECONDS) // 2,5 menit
-            .connectTimeout(60, TimeUnit.SECONDS) // 1 menit
+        val authInterceptor = Interceptor { chain ->
+            val req = chain.request()
+            val requestHeaders = req.newBuilder()
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+            chain.proceed(requestHeaders)
+        }
+
+        val client = OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor as Interceptor)
+            .addInterceptor(authInterceptor as Interceptor)
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://story-api.dicoding.dev/v1/")
-            .client(okhttp)
+            .baseUrl(BASEURL)
             .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
             .build()
 
-        return retrofit.create<ApiService>() // lebih singkat dan bersih generic
+        return retrofit.create(ApiService::class.java)
     }
 }

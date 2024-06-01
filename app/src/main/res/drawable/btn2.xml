@@ -11,5 +11,5 @@
         android:type="radial " />
 
 
-    <corners android:radius="40dp"></corners>
+    <corners android:radius="10dp"></corners>
 </shape>

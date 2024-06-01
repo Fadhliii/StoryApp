@@ -12,10 +12,10 @@ class VMFactory(
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         when {
-            modelClass.isAssignableFrom(MainVM::class.java)            -> {
-                return MainVM(repository, userPreference) as T
+            modelClass.isAssignableFrom(UserWelcomeViewModel::class.java) -> {
+                return UserWelcomeViewModel(repository, userPreference) as T
             }
-            modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
+            modelClass.isAssignableFrom(RegisterViewModel::class.java)    -> {
                 return RegisterViewModel(repository) as T //it doesnt need userpref
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java)    -> {

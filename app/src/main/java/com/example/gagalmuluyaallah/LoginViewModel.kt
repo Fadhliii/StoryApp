@@ -7,17 +7,21 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
         //summon repository and preference to get the token <3
         private val repository: GeneralRepository,
-        private val userPreference: UserPreference,
+        private val pref: UserPreference,
 ) : ViewModel() {
     fun loginViewModel(email: String, password: String) = repository.login(email, password) // not yet to be implemented
 
     //save login session
     fun saveLoginViewModel(token: String) { // not yet to be implemented
         viewModelScope.launch {
-            userPreference.saveToken(token)
+            pref.saveToken(token)
             //generate login
-            userPreference.onLogin()
+            pref.login()
         }
 
+    }
+    suspend fun logout() {
+        // Panggil fungsi logout di UserPreference
+        pref.logout()
     }
 }

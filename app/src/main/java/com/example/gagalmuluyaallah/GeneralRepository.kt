@@ -22,12 +22,10 @@ class GeneralRepository private constructor(
     // get token from user preference
     //the method is called suspend because its need to wait until the token is ready
     // so it can run in the background
-    suspend fun getToken(): String? = token ?: runBlocking { //token is for the user login and stories related
-        // runblocking is block the thread until the token is ready
+    private suspend fun getToken(): String? = token ?: runBlocking {
         userPreference.getToken().first()
-    }.also {
-        token = it // set token
-    }
+    }.also { token = it }
+
 
     // this function is to send the register user to dicoding API Database.
     //@PARAM name
@@ -69,15 +67,16 @@ class GeneralRepository private constructor(
             if (loginResult != null) {
                 emit(ResultSealed.Success(loginResult)) //if sukses
             }
-        } catch (e: HttpException){
+        } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
-            Log.e("Login Server error", "Register HTTP : ${e.message}" )
+            Log.e("Login Server error", "Login HTTP : ${e.message}")
             emit(ResultSealed.Error(errorResponse.message.toString()))
 
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Log.d("Login Result error 3", "Register 03 : ${e.message}")
+            emit(ResultSealed.Error(e.message.toString()))
+
         }
     }
 

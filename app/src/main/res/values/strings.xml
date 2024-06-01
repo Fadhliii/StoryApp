@@ -14,4 +14,6 @@
     <string name="password_length">Password must contain more than 6 characters</string>
     <string name="content_description_start_icon">username</string>
     <string name="login">Login</string>
+    <string name="Login_succes">Login Successs !</string>
+    <string name="logout">Logout</string>
 </resources>
