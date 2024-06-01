@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class UserPreference private constructor(private val dataStore: DataStore<Preferences>) {
-    suspend fun onLogin() { //set user login
+    suspend fun onLogin() { // this one is for loginviewmodel
         dataStore.edit { preferences ->
             preferences[STATE_KEY] = true
         }
@@ -27,7 +27,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
     }
 
     //save token
-    fun saveToken(): Flow<String?> = dataStore.data.map { preferences ->
+    fun saveToken(token: String): Flow<String?> = dataStore.data.map { preferences ->
         preferences[TOKEN_KEY]
     }
 

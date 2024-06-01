@@ -17,7 +17,11 @@ class VMFactory(
             }
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
                 return RegisterViewModel(repository) as T //it doesnt need userpref
-            } else                                                     -> throw IllegalArgumentException("Unknown / invalid VM class : " + modelClass.name)
+            }
+            modelClass.isAssignableFrom(LoginViewModel::class.java)    -> {
+                return LoginViewModel(repository, userPreference) as T
+            }
+            else                                                     -> throw IllegalArgumentException("Unknown / invalid VM class : " + modelClass.name)
         }
     }
 

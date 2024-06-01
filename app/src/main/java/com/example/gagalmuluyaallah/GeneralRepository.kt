@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.gagalmuluyaallah.model.ApiService
 import com.example.gagalmuluyaallah.model.GeneralResponse
+import com.example.gagalmuluyaallah.model.LoginResult
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -31,7 +32,7 @@ class GeneralRepository private constructor(
     //@PARAM name
     //@PARAM email
     //@Param password
-    fun register    (name: String, email: String, password: String): LiveData<ResultSealed<GeneralResponse>> = liveData {
+    fun register(name: String, email: String, password: String): LiveData<ResultSealed<GeneralResponse>> = liveData {
         emit(ResultSealed.Loading)
         Log.d("GeneralRepository", "register: $name, $email, $password")
         try {
@@ -58,16 +59,37 @@ class GeneralRepository private constructor(
         }
     }
 
+    fun login(email: String, password: String): LiveData<ResultSealed<LoginResult>> = liveData {
+        emit(ResultSealed.Loading)
+        try {
+            val response = apiService.login(email, password)
+            val loginResult = response.loginResult
+
+            if (loginResult != null) {
+                emit(ResultSealed.Success(loginResult)) //if sukses
+            }
+        } catch (e: HttpException){
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
+            Log.e("Login Server error", "Register HTTP : ${e.message}" )
+            emit(ResultSealed.Error(errorResponse.message.toString()))
+
+        }
+        catch (e: Exception) {
+            Log.d("Login Result error 3", "Register 03 : ${e.message}")
+        }
+    }
+
     companion object {
         //set instance to GeneralRepository
-        private var instance: GeneralRepository ?= null
+        private var instance: GeneralRepository? = null
 
         // this one is to set the instance so it can be use somewhere else
-        fun getInstance( // instance for api and userpreference to save the token
+        fun getInstance(
+                // instance for api and userpreference to save the token
                 apiService: ApiService, //from ApiService
                 userPreference: UserPreference,
-        ): GeneralRepository
-        {
+        ): GeneralRepository {
             return instance ?: synchronized(this) {
                 instance ?: GeneralRepository(apiService, userPreference).also { instance = it }
             }

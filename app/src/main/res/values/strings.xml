@@ -2,12 +2,14 @@
     <string name="app_name">Keluh Kesah Bangkit</string>
     <string name="register">Register</string>
     <string name="email">Email</string>
-    <string name="empty_name">EmptyName\n</string>
+    <string name="empty_name">Harus lebih dari 6 karakter\n</string>
     <string name="empty_email">EmptyEmail\n</string>
     <string name="empty_password">EmptyPassword\n</string>
     <string name="password">Password</string>
-    <string name="password_empty">password empty</string>
+    <string name="password_empty">password must contain more than 6 characters</string>
     <string name="register_button">Register</string>
     <string name="welcome">Selamat Datang di Aplikasi</string>
     <string name="welcome_message">Selamat datang di Aplikasi gajelas</string>
+    <string name="email_invalid">Only email format\n</string>
+    <string name="password_length">Password must contain more than 6 characters</string>
 </resources>
