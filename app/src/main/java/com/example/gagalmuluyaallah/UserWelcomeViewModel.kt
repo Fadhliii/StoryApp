@@ -13,4 +13,7 @@ class UserWelcomeViewModel ( //connecting to GeneralRepository and UserPreferenc
             userPreference.logout()
         }
     }
+//    !!val stories: LiveData<Result<PagingData<StoryItem>>> by lazy {
+//    !!    repository.getAllStories(viewModelScope)
+//    !! }
 }

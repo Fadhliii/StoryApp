@@ -1,4 +1,4 @@
-package com.example.gagalmuluyaallah
+package com.example.gagalmuluyaallah.View
 
 import android.content.Context
 import android.content.Intent
@@ -15,6 +15,11 @@ import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModelProvider
+import com.example.gagalmuluyaallah.R
+import com.example.gagalmuluyaallah.RegisterViewModel
+import com.example.gagalmuluyaallah.ResultSealed
+import com.example.gagalmuluyaallah.UserPreference
+import com.example.gagalmuluyaallah.VMFactory
 import com.example.gagalmuluyaallah.databinding.ActivityRegisterBinding
 import com.google.android.material.snackbar.Snackbar
 

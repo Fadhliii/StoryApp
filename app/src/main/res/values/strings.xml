@@ -16,4 +16,11 @@
     <string name="login">Login</string>
     <string name="Login_succes">Login Successs !</string>
     <string name="logout">Logout</string>
+    <string name="welcome_message_afferlogin">Selamat datang,</string>
+    <string name="check_all_stories">Check all stories</string>
+    <string name="upload_story">+ Upload Story</string>
+    <string name="description">description</string>
+    <string name="gallery">Gallery</string>
+    <string name="upload">Upload</string>
+    <string name="no_media_selected">Empty Image\n</string>
 </resources>

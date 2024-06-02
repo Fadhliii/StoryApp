@@ -11,6 +11,6 @@
         android:type="linear"
         />
 <!--    radius corner-->
-    <corners android:radius="10dp" />
+    <corners android:radius="2dp" />
 
 </shape>

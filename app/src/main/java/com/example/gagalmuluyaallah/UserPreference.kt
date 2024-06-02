@@ -25,6 +25,18 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
             preferences[TOKEN_KEY] = token
         }
     }
+    suspend fun saveUserEmail(email: String) {
+        dataStore.edit { preferences ->
+            preferences[EMAIL_KEY] = email
+        }
+    }
+
+    fun getUserEmail(): Flow<String?> {
+        return dataStore.data.map { preferences ->
+            preferences[EMAIL_KEY]
+        }
+    }
+
     suspend fun logout() {
         dataStore.edit { preferences ->
             preferences[TOKEN_KEY] = ""
@@ -32,10 +44,11 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         }
     }
 
+
     companion object {
         @Volatile
         private var INSTANCE: UserPreference? = null
-
+        private val EMAIL_KEY = stringPreferencesKey("email")
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val STATE_KEY = booleanPreferencesKey("state")
 

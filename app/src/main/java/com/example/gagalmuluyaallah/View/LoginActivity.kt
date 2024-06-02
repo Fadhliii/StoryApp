@@ -1,4 +1,4 @@
-package com.example.gagalmuluyaallah
+package com.example.gagalmuluyaallah.View
 
 import android.app.AlertDialog
 import android.content.Context
@@ -7,15 +7,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.gagalmuluyaallah.LoginViewModel
+import com.example.gagalmuluyaallah.R
+import com.example.gagalmuluyaallah.ResultSealed
+import com.example.gagalmuluyaallah.UserPreference
+import com.example.gagalmuluyaallah.VMFactory
 import com.example.gagalmuluyaallah.databinding.ActivityLoginBinding
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
@@ -24,10 +26,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var userPreference: UserPreference
     private lateinit var binding: ActivityLoginBinding
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
-    private fun succesLogin() {
-        startActivity(Intent(this, UserWelcomeActivity::class.java))
-        finish()
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,9 +58,7 @@ class LoginActivity : AppCompatActivity() {
     // action login button clicked by user
     private fun actionLogin() {
         binding.btnlogin.setOnClickListener {
-
             setupLogin()
-
 //            val email = binding.InputEmail.toString()
 //            val password = binding.InputPassword.text.toString()
 //            if (email.isEmpty() || password.isEmpty()) {
@@ -88,6 +85,11 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+    private fun succesLogin() {
+        startActivity(Intent(this, UserWelcomeActivity::class.java))
+        finish() // Menambahkan in
+    }
+
     private fun setupLogin() {
         val loginViewModel = getViewModel(this@LoginActivity)
         val email = binding.InputEmail.text.toString() //email
@@ -105,20 +107,23 @@ class LoginActivity : AppCompatActivity() {
             else               -> {loginViewModel.loginViewModel(email, password).observe(this@LoginActivity){
                 if(it != null){
                     when(it){
-                        is ResultSealed.Loading->{
+                        is ResultSealed.Loading ->{
                             loadingBar(true)
                         }
-                        is ResultSealed.Success->{
+                        is ResultSealed.Success ->{
                             loadingBar(false)
                             val response = it.data
                             loginViewModel.saveLoginViewModel(response.token.toString())
+                            lifecycleScope.launch {
+                                userPreference.saveUserEmail(email)
+                            }
                             showToast(getString(R.string.Login_succes))
                             val intent = Intent(this@LoginActivity, UserWelcomeActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                             startActivity(intent)
                             finish()
                         }
-                        is ResultSealed.Error -> {
+                        is ResultSealed.Error   -> {
                             loadingBar(false)
                             Log.e("Login error", "Login user error : ${it.exception}")
                             // Membuat AlertDialog

@@ -1,4 +1,4 @@
-package com.example.gagalmuluyaallah
+package com.example.gagalmuluyaallah.View
 
 import android.animation.ObjectAnimator
 import android.content.Intent
@@ -15,6 +15,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.gagalmuluyaallah.R
+import com.example.gagalmuluyaallah.UserPreference
 import com.example.gagalmuluyaallah.databinding.ActivityMainBinding
 import com.example.gagalmuluyaallah.model.dataStore
 import kotlinx.coroutines.launch
