@@ -17,21 +17,19 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.dicoding.picodiploma.mycamera.getImageUri
 import com.example.gagalmuluyaallah.R
 import com.example.gagalmuluyaallah.View.LoginActivity.Companion.SESSION
 import com.example.gagalmuluyaallah.databinding.ActivityAddStoryBinding
-//import getImageUri
 
 class AddStoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddStoryBinding
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
     private fun allPermissionsGranted() =
-            REQUIRED_PERMISSIONS.all {
-                ContextCompat.checkSelfPermission(
-                        this,
-                        it
-                ) == PackageManager.PERMISSION_GRANTED
-            }
+            ContextCompat.checkSelfPermission(
+                    this,
+                    REQUIRED_PERMISSION
+            ) == PackageManager.PERMISSION_GRANTED
     private var currentImageUri: Uri? = null // Image URI from gallery
 
     private val requestPermissionLauncher =
@@ -59,14 +57,14 @@ class AddStoryActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (!allPermissionsGranted()) {
-            requestPermissionLauncher.launch(REQUIRED_PERMISSIONS)
+            requestPermissionLauncher.launch(arrayOf(REQUIRED_PERMISSION))
         }
         setupAction()
     }
     private fun setupAction() {
         binding.btnGallery.setOnClickListener { startGallery() }
-//        binding.btnCamera.setOnClickListener { startCamera() }
-        //        binding.uploadButton.setOnClickListener { uploadStory() }
+        binding.btnCamera.setOnClickListener { startCamera() }
+//        binding.uploadButton.setOnClickListener { uploadStory() }
     }
     private fun startGallery() {
         launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -81,10 +79,10 @@ class AddStoryActivity : AppCompatActivity() {
             Log.d("Photo Picker", getString(R.string.no_media_selected))
         }
     }
-//    private fun startCamera() {
-//        currentImageUri = getImageUri(this)
-//        launcherIntentCamera.launch(currentImageUri!!)
-//    }
+    private fun startCamera() {
+        currentImageUri = getImageUri(this)
+        launcherIntentCamera.launch(currentImageUri!!)
+    }
 
     private fun showImage() {
         currentImageUri?.let {
@@ -101,7 +99,9 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     companion object {
+
         const val SESSION = "session"
-        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
+
     }
 }
