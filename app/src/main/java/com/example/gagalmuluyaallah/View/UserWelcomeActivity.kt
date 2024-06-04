@@ -44,6 +44,7 @@ class UserWelcomeActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
         // upload story
         binding.btnUploadStory.setOnClickListener {
             val intent = Intent(this, AddStoryActivity::class.java)

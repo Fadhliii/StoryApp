@@ -1,8 +1,10 @@
 package com.example.gagalmuluyaallah
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import com.dicoding.picodiploma.mycamera.reduceFileImage
 import com.example.gagalmuluyaallah.model.ApiService
 import com.example.gagalmuluyaallah.model.GeneralResponse
 import com.example.gagalmuluyaallah.model.LoginResponse
@@ -10,7 +12,12 @@ import com.example.gagalmuluyaallah.model.LoginResult
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
+import java.io.File
 
 class GeneralRepository private constructor(
         private var apiService: ApiService,
@@ -77,6 +84,35 @@ class GeneralRepository private constructor(
             Log.d("Login Result error 3", "Register 03 : ${e.message}")
             emit(ResultSealed.Error(e.message.toString()))
 
+        }
+    }
+
+    fun uploadNewStory(file: File?, description: String, lat: Double?, lon: Double?): LiveData<ResultSealed<GeneralResponse>> = liveData {
+        emit(ResultSealed.Loading)
+        try {
+            val imageFile = reduceFileImage(file!!)
+            Log.d("Image File", "showImage: ${imageFile.path}")
+
+            val descriptionBody = description.toRequestBody("text/plain".toMediaType())
+            val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+
+            val multipartBody = MultipartBody.Part.createFormData(
+                    "photo",
+                    imageFile.name,
+                    requestImageFile
+            )
+
+            val response = apiService.addNewStory(multipartBody, descriptionBody, lat, lon)
+
+            emit((ResultSealed.Success(response)))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, GeneralResponse::class.java)
+
+            emit(ResultSealed.Error(errorResponse.message.toString()))
+        } catch (e: Exception) {
+            Toast.makeText(null, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            emit(ResultSealed.Error(e.message.toString()))
         }
     }
 

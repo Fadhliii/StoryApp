@@ -152,8 +152,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-
-
     fun loadingBar(isLoading: Boolean) {
         binding.progressBar1.visibility = if (isLoading) View.VISIBLE else View.GONE
 

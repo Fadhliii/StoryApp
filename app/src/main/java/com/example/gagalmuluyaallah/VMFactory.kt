@@ -3,6 +3,7 @@ package com.example.gagalmuluyaallah
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.gagalmuluyaallah.View.AddStoryViewModel
 import com.example.gagalmuluyaallah.model.Injection
 
 @Suppress("UNCHECKED_CAST")
@@ -20,6 +21,9 @@ class VMFactory(
             }
             modelClass.isAssignableFrom(LoginViewModel::class.java)    -> {
                 return LoginViewModel(repository, userPreference) as T
+            }
+            modelClass.isAssignableFrom(AddStoryViewModel::class.java)    -> {
+                return AddStoryViewModel(repository) as T
             }
             else                                                     -> throw IllegalArgumentException("Unknown / invalid VM class : " + modelClass.name)
         }
