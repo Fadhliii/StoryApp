@@ -4,23 +4,26 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.gagalmuluyaallah.View.AddStoryViewModel
+import com.example.gagalmuluyaallah.View.LoginViewModel
+import com.example.gagalmuluyaallah.View.RegisterViewModel
 import com.example.gagalmuluyaallah.model.Injection
+import com.example.gagalmuluyaallah.GeneralRepository
 
 @Suppress("UNCHECKED_CAST")
 class VMFactory(
         private val repository: GeneralRepository,
-        private val userPreference: UserPreference,
+        private val pref: UserPreference,
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         when {
             modelClass.isAssignableFrom(UserWelcomeViewModel::class.java) -> {
-                return UserWelcomeViewModel(repository, userPreference) as T
+                return UserWelcomeViewModel(repository, pref) as T
             }
             modelClass.isAssignableFrom(RegisterViewModel::class.java)    -> {
                 return RegisterViewModel(repository) as T //it doesnt need userpref
             }
-            modelClass.isAssignableFrom(LoginViewModel::class.java)    -> {
-                return LoginViewModel(repository, userPreference) as T
+            modelClass.isAssignableFrom(LoginViewModel::class.java)       -> {
+                return LoginViewModel(repository, pref) as T
             }
             modelClass.isAssignableFrom(AddStoryViewModel::class.java)    -> {
                 return AddStoryViewModel(repository) as T
@@ -31,7 +34,6 @@ class VMFactory(
 
 
     companion object {
-        // volatile is used to make sure that the value of instance is always up-to-date and the same to all execution thread
         @Volatile
         private var instance: VMFactory? = null
         fun getInstance(context: Context, pref: UserPreference): VMFactory =

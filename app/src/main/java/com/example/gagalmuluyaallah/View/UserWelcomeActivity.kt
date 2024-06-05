@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.example.gagalmuluyaallah.LoginViewModel
+import com.example.gagalmuluyaallah.AllStoryActivity
 import com.example.gagalmuluyaallah.UserPreference
 import com.example.gagalmuluyaallah.VMFactory
 import com.example.gagalmuluyaallah.databinding.ActivityUserWelcomeBinding
@@ -48,6 +48,11 @@ class UserWelcomeActivity : AppCompatActivity() {
         // upload story
         binding.btnUploadStory.setOnClickListener {
             val intent = Intent(this, AddStoryActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnCheckAllStories.setOnClickListener {
+            val intent = Intent(this, AllStoryActivity::class.java)
             startActivity(intent)
         }
 

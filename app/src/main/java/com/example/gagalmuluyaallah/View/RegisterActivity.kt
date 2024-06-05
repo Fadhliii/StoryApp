@@ -16,7 +16,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModelProvider
 import com.example.gagalmuluyaallah.R
-import com.example.gagalmuluyaallah.RegisterViewModel
 import com.example.gagalmuluyaallah.ResultSealed
 import com.example.gagalmuluyaallah.UserPreference
 import com.example.gagalmuluyaallah.VMFactory
@@ -123,7 +122,6 @@ class RegisterActivity : AppCompatActivity() {
                                 Toast.makeText(this, "Register Success", Toast.LENGTH_LONG).show()
                                 val snackbar = Snackbar.make(binding.root, "Register Success", Snackbar.LENGTH_LONG)
                                 snackbar.setBackgroundTint(ContextCompat.getColor(this@RegisterActivity, R.color.green))
-                                snackbar.setTextColor(ContextCompat.getColor(this@RegisterActivity, R.color.white))
                                 snackbar.show()
                                 startActivity(Intent(this, MainActivity::class.java))
                                 finish()

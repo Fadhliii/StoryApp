@@ -4,13 +4,22 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
 import com.dicoding.picodiploma.mycamera.reduceFileImage
+import com.example.gagalmuluyaallah.model.ApiConfig
 import com.example.gagalmuluyaallah.model.ApiService
 import com.example.gagalmuluyaallah.model.GeneralResponse
 import com.example.gagalmuluyaallah.model.LoginResponse
 import com.example.gagalmuluyaallah.model.LoginResult
+import com.example.gagalmuluyaallah.model.StoriesResponse
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -115,6 +124,47 @@ class GeneralRepository private constructor(
             emit(ResultSealed.Error(e.message.toString()))
         }
     }
+
+    fun getAllStories(viewModelScope: CoroutineScope) {
+
+    }
+
+    //    fun getAllStories(): LiveData<ResultSealed<PagingData<ListStoryItem>>> = liveData {
+    //        emit(ResultSealed.Loading)
+    //        try {
+    //            val response = apiService.getStories()
+    //            val pagingData = listOf(response)!!.map { it }
+    //            emit(ResultSealed.Success(PagingData.from(pagingData)))
+    //        } catch (e: HttpException) {
+    //            val errorBody = e.response()?.errorBody()?.string()
+    //            val errorResponse = Gson().fromJson(errorBody, StoriesResponse::class.java)
+    //            emit(ResultSealed.Error(errorResponse.message.toString()))
+    //        } catch (e: Exception) {
+    //            emit(ResultSealed.Error(e.message.toString()))
+    //        }
+    //    }
+
+//    fun getAllStories(coroutineScope: CoroutineScope): LiveData<ResultSealed<List<StoryItems>>> = liveData {
+//        emit(ResultSealed.Loading)
+//        try {
+//            val token = getToken()
+//            apiService = ApiConfig.getApiService(token.toString())
+//
+//            val response = apiService.getStories()
+//        } catch (e: HttpException) {
+//
+//            val errorBody = e.response()?.errorBody()?.string()
+//            val errorResponse = Gson().fromJson(errorBody, StoriesResponse::class.java)
+//
+//            emit(ResultSealed.Error(errorResponse.message.toString()))
+//        } catch (e: Exception) {
+//            Log.e("GeneralRepository", "getAllStories: ${e.message}")
+//            emit(ResultSealed.Error(e.message.toString()))
+//        }
+//    }
+
+
+
 
     companion object {
         //set instance to GeneralRepository

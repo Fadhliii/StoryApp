@@ -1,7 +1,9 @@
-package com.example.gagalmuluyaallah
+package com.example.gagalmuluyaallah.View
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.gagalmuluyaallah.GeneralRepository
+import com.example.gagalmuluyaallah.UserPreference
 import kotlinx.coroutines.launch
 
 class LoginViewModel(

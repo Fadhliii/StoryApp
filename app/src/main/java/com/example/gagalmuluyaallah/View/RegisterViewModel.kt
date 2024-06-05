@@ -1,6 +1,7 @@
-package com.example.gagalmuluyaallah
+package com.example.gagalmuluyaallah.View
 
 import androidx.lifecycle.ViewModel
+import com.example.gagalmuluyaallah.GeneralRepository
 
 // this viewmodel is for register so it can split the ui and model
 class RegisterViewModel(val repository: GeneralRepository) : ViewModel() {

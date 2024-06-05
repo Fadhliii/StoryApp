@@ -52,6 +52,8 @@ dependencies {
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.exifinterface)
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -85,4 +87,6 @@ dependencies {
     implementation("io.coil-kt:coil:1.4.0")
     //coil image
     implementation("io.coil-kt:coil:1.4.0")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
 }
