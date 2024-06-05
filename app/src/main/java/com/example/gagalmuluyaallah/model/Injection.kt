@@ -6,8 +6,8 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.gagalmuluyaallah.GeneralRepository
-import com.example.gagalmuluyaallah.UserPreference
+import com.example.gagalmuluyaallah.connection.GeneralRepository
+import com.example.gagalmuluyaallah.connection.UserPreference
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 

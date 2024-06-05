@@ -1,4 +1,4 @@
-package com.example.gagalmuluyaallah
+package com.example.gagalmuluyaallah.connection
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

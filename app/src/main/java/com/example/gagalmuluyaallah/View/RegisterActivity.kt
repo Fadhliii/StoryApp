@@ -17,8 +17,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModelProvider
 import com.example.gagalmuluyaallah.R
 import com.example.gagalmuluyaallah.ResultSealed
-import com.example.gagalmuluyaallah.UserPreference
-import com.example.gagalmuluyaallah.VMFactory
+import com.example.gagalmuluyaallah.connection.UserPreference
+import com.example.gagalmuluyaallah.connection.VMFactory
 import com.example.gagalmuluyaallah.databinding.ActivityRegisterBinding
 import com.google.android.material.snackbar.Snackbar
 

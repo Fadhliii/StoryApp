@@ -5,9 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.example.gagalmuluyaallah.AllStoryActivity
-import com.example.gagalmuluyaallah.UserPreference
-import com.example.gagalmuluyaallah.VMFactory
+import com.example.gagalmuluyaallah.connection.UserPreference
+import com.example.gagalmuluyaallah.connection.VMFactory
 import com.example.gagalmuluyaallah.databinding.ActivityUserWelcomeBinding
 import com.example.gagalmuluyaallah.model.dataStore
 import kotlinx.coroutines.flow.first
@@ -51,10 +50,10 @@ class UserWelcomeActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.btnCheckAllStories.setOnClickListener {
-            val intent = Intent(this, AllStoryActivity::class.java)
-            startActivity(intent)
-        }
+//        binding.btnCheckAllStories.setOnClickListener {
+//            val intent = Intent(this, AllStoryActivity::class.java)
+//            startActivity(intent)
+//        }
 
     }
 

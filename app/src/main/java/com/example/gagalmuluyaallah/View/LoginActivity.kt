@@ -15,8 +15,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.gagalmuluyaallah.R
 import com.example.gagalmuluyaallah.ResultSealed
-import com.example.gagalmuluyaallah.UserPreference
-import com.example.gagalmuluyaallah.VMFactory
+import com.example.gagalmuluyaallah.connection.UserPreference
+import com.example.gagalmuluyaallah.connection.VMFactory
 import com.example.gagalmuluyaallah.databinding.ActivityLoginBinding
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException

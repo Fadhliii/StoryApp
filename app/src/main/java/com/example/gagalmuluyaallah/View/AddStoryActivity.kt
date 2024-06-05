@@ -9,13 +9,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -24,8 +21,8 @@ import com.dicoding.picodiploma.mycamera.getImageUri
 import com.dicoding.picodiploma.mycamera.uriToFile
 import com.example.gagalmuluyaallah.R
 import com.example.gagalmuluyaallah.ResultSealed
-import com.example.gagalmuluyaallah.UserPreference
-import com.example.gagalmuluyaallah.VMFactory
+import com.example.gagalmuluyaallah.connection.UserPreference
+import com.example.gagalmuluyaallah.connection.VMFactory
 import com.example.gagalmuluyaallah.databinding.ActivityAddStoryBinding
 import com.google.android.material.snackbar.Snackbar
 import java.io.File

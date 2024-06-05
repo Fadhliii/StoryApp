@@ -1,4 +1,4 @@
-package com.example.gagalmuluyaallah
+package com.example.gagalmuluyaallah.connection
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -7,7 +7,7 @@ import com.example.gagalmuluyaallah.View.AddStoryViewModel
 import com.example.gagalmuluyaallah.View.LoginViewModel
 import com.example.gagalmuluyaallah.View.RegisterViewModel
 import com.example.gagalmuluyaallah.model.Injection
-import com.example.gagalmuluyaallah.GeneralRepository
+import com.example.gagalmuluyaallah.View.UserWelcomeViewModel
 
 @Suppress("UNCHECKED_CAST")
 class VMFactory(

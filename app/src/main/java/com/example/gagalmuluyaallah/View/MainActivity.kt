@@ -16,7 +16,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.gagalmuluyaallah.R
-import com.example.gagalmuluyaallah.UserPreference
+import com.example.gagalmuluyaallah.connection.UserPreference
 import com.example.gagalmuluyaallah.databinding.ActivityMainBinding
 import com.example.gagalmuluyaallah.model.dataStore
 import kotlinx.coroutines.launch

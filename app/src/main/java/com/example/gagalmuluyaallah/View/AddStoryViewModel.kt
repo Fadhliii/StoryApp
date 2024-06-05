@@ -1,7 +1,7 @@
 package com.example.gagalmuluyaallah.View
 
 import androidx.lifecycle.ViewModel
-import com.example.gagalmuluyaallah.GeneralRepository
+import com.example.gagalmuluyaallah.connection.GeneralRepository
 import java.io.File
 
 class AddStoryViewModel(private val repository: GeneralRepository): ViewModel() {

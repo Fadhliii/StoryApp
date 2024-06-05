@@ -1,25 +1,18 @@
-package com.example.gagalmuluyaallah
+package com.example.gagalmuluyaallah.connection
 
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import androidx.paging.map
 import com.dicoding.picodiploma.mycamera.reduceFileImage
-import com.example.gagalmuluyaallah.model.ApiConfig
+import com.example.gagalmuluyaallah.ResultSealed
 import com.example.gagalmuluyaallah.model.ApiService
 import com.example.gagalmuluyaallah.model.GeneralResponse
 import com.example.gagalmuluyaallah.model.LoginResponse
 import com.example.gagalmuluyaallah.model.LoginResult
-import com.example.gagalmuluyaallah.model.StoriesResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
