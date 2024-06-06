@@ -22,7 +22,7 @@ import com.dicoding.picodiploma.mycamera.uriToFile
 import com.example.gagalmuluyaallah.R
 import com.example.gagalmuluyaallah.ResultSealed
 import com.example.gagalmuluyaallah.connection.UserPreference
-import com.example.gagalmuluyaallah.connection.VMFactory
+import com.example.gagalmuluyaallah.connection.ViewModelFactory
 import com.example.gagalmuluyaallah.databinding.ActivityAddStoryBinding
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
@@ -123,7 +123,7 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun getViewModel(activity: AppCompatActivity): AddStoryViewModel {
-        val factory = VMFactory.getInstance(
+        val factory = ViewModelFactory.getInstance(
                 activity.application,
                 UserPreference.getInstance(dataStore)
         )

@@ -16,7 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.gagalmuluyaallah.R
 import com.example.gagalmuluyaallah.ResultSealed
 import com.example.gagalmuluyaallah.connection.UserPreference
-import com.example.gagalmuluyaallah.connection.VMFactory
+import com.example.gagalmuluyaallah.connection.ViewModelFactory
 import com.example.gagalmuluyaallah.databinding.ActivityLoginBinding
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
@@ -143,7 +143,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
     private fun getViewModel(activity: AppCompatActivity): LoginViewModel {
-        val factory = VMFactory.getInstance(
+        val factory = ViewModelFactory.getInstance(
                 activity.application,
                 UserPreference.getInstance(dataStore)
         )

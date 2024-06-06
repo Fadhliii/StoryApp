@@ -4,12 +4,17 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.PagingData
 import com.dicoding.picodiploma.mycamera.reduceFileImage
 import com.example.gagalmuluyaallah.ResultSealed
+import com.example.gagalmuluyaallah.model.ApiConfig
 import com.example.gagalmuluyaallah.model.ApiService
-import com.example.gagalmuluyaallah.model.GeneralResponse
-import com.example.gagalmuluyaallah.model.LoginResponse
-import com.example.gagalmuluyaallah.model.LoginResult
+import com.example.gagalmuluyaallah.response.GeneralResponse
+import com.example.gagalmuluyaallah.response.LoginResponse
+import com.example.gagalmuluyaallah.response.LoginResult
+import com.example.gagalmuluyaallah.response.StoriesResponse
+import com.example.gagalmuluyaallah.response.StoryItem
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -118,7 +123,25 @@ class GeneralRepository private constructor(
         }
     }
 
-    fun getAllStories(viewModelScope: CoroutineScope) {
+    @OptIn(ExperimentalPagingApi::class)
+    fun getAllStories(ViewModelScope: CoroutineScope): LiveData<ResultSealed<List<StoryItem>>> = liveData {
+        emit(ResultSealed.Loading)
+        try {
+            val token = getToken()
+            apiService = ApiConfig.getApiService(token.toString())
+
+
+            val response = apiService.getStories()
+        } catch (e: HttpException) {
+
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, StoriesResponse::class.java)
+
+            emit(ResultSealed.Error(errorResponse.message.toString()))
+        } catch (e: Exception) {
+            Log.e("GeneralRepository", "getAllStories: ${e.message}")
+            emit(ResultSealed.Error(e.message.toString()))
+        }
 
     }
 

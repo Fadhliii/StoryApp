@@ -1,6 +1,9 @@
 package com.example.gagalmuluyaallah.model
 
-import StoryItem
+import com.example.gagalmuluyaallah.response.GeneralResponse
+import com.example.gagalmuluyaallah.response.LoginResponse
+import com.example.gagalmuluyaallah.response.StoriesResponse
+import com.example.gagalmuluyaallah.response.StoryItem
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Field
@@ -40,7 +43,7 @@ interface ApiService {
     suspend fun getStories(
             @Query("page") page: Int = 1,
             @Query("size") size: Int = 25
-    ): StoryItem
+    ): StoriesResponse
 
 
 }

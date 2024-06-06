@@ -49,7 +49,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.datastore.core.android)
     implementation(libs.androidx.datastore.preferences.core.jvm)
-    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+    implementation ("androidx.datastore:datastore-preferences:1.1.1")
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.paging.runtime.ktx)

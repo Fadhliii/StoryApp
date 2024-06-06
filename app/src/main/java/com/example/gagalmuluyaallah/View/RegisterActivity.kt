@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.gagalmuluyaallah.R
 import com.example.gagalmuluyaallah.ResultSealed
 import com.example.gagalmuluyaallah.connection.UserPreference
-import com.example.gagalmuluyaallah.connection.VMFactory
+import com.example.gagalmuluyaallah.connection.ViewModelFactory
 import com.example.gagalmuluyaallah.databinding.ActivityRegisterBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -148,7 +148,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun getViewModel(activity: AppCompatActivity): RegisterViewModel {
-        val factory = VMFactory.getInstance(
+        val factory = ViewModelFactory.getInstance(
                 activity.application,
                 UserPreference.getInstance(dataStore)
         )
