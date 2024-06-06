@@ -116,8 +116,6 @@ class LoginActivity : AppCompatActivity() {
                             lifecycleScope.launch {
                                 userPreference.saveUserEmail(email)
                             }
-                            showToast(getString(R.string.Login_succes))
-                            val intent = Intent(this@LoginActivity, UserWelcomeActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                             startActivity(intent)
                             finish()

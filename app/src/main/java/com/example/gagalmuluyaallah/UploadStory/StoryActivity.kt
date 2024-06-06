@@ -33,6 +33,7 @@ class StoryActivity : AppCompatActivity() {
         binding = ActivityStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = obtainViewModel(this@StoryActivity)
+        setupStory()
     }
 
 
@@ -54,7 +55,7 @@ class StoryActivity : AppCompatActivity() {
                     is ResultSealed.Success -> {
                         showLoading(false)
                         val response = it.data
-
+                        storyAdapter.setData(response)
                         Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
                     }
 

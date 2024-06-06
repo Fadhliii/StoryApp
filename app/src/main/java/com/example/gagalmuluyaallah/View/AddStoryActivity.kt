@@ -143,7 +143,6 @@ class AddStoryActivity : AppCompatActivity() {
           Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
             return
         }
-
         currentImageUri?.let { uri ->
             val imageFile = uriToFile(uri, this)
             val descriptionBody = binding.textinput.toString()

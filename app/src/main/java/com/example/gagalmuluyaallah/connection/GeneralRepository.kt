@@ -130,8 +130,8 @@ class GeneralRepository private constructor(
             val token = getToken()
             apiService = ApiConfig.getApiService(token.toString())
 
-
             val response = apiService.getStories()
+            emit(ResultSealed.Success(response.listStory))
         } catch (e: HttpException) {
 
             val errorBody = e.response()?.errorBody()?.string()
