@@ -25,4 +25,7 @@
     <string name="no_media_selected">Empty Image\n</string>
     <string name="createdat">createdat</string>
     <string name="retry">retry\n</string>
+    <string name="failed_to_load_data">error</string>
+    <string name="not_available">Empty</string>
+    <string name="successfully_logged_in">Sukses\n</string>
 </resources>

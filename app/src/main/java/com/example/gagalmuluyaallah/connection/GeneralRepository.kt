@@ -145,43 +145,6 @@ class GeneralRepository private constructor(
 
     }
 
-    //    fun getAllStories(): LiveData<ResultSealed<PagingData<ListStoryItem>>> = liveData {
-    //        emit(ResultSealed.Loading)
-    //        try {
-    //            val response = apiService.getStories()
-    //            val pagingData = listOf(response)!!.map { it }
-    //            emit(ResultSealed.Success(PagingData.from(pagingData)))
-    //        } catch (e: HttpException) {
-    //            val errorBody = e.response()?.errorBody()?.string()
-    //            val errorResponse = Gson().fromJson(errorBody, StoriesResponse::class.java)
-    //            emit(ResultSealed.Error(errorResponse.message.toString()))
-    //        } catch (e: Exception) {
-    //            emit(ResultSealed.Error(e.message.toString()))
-    //        }
-    //    }
-
-//    fun getAllStories(coroutineScope: CoroutineScope): LiveData<ResultSealed<List<StoryItems>>> = liveData {
-//        emit(ResultSealed.Loading)
-//        try {
-//            val token = getToken()
-//            apiService = ApiConfig.getApiService(token.toString())
-//
-//            val response = apiService.getStories()
-//        } catch (e: HttpException) {
-//
-//            val errorBody = e.response()?.errorBody()?.string()
-//            val errorResponse = Gson().fromJson(errorBody, StoriesResponse::class.java)
-//
-//            emit(ResultSealed.Error(errorResponse.message.toString()))
-//        } catch (e: Exception) {
-//            Log.e("GeneralRepository", "getAllStories: ${e.message}")
-//            emit(ResultSealed.Error(e.message.toString()))
-//        }
-//    }
-
-
-
-
     companion object {
         //set instance to GeneralRepository
         private var instance: GeneralRepository? = null

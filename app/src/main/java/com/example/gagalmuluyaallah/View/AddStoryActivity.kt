@@ -21,6 +21,7 @@ import com.dicoding.picodiploma.mycamera.getImageUri
 import com.dicoding.picodiploma.mycamera.uriToFile
 import com.example.gagalmuluyaallah.R
 import com.example.gagalmuluyaallah.ResultSealed
+import com.example.gagalmuluyaallah.UploadStory.StoryActivity
 import com.example.gagalmuluyaallah.connection.UserPreference
 import com.example.gagalmuluyaallah.connection.ViewModelFactory
 import com.example.gagalmuluyaallah.databinding.ActivityAddStoryBinding
@@ -68,13 +69,15 @@ class AddStoryActivity : AppCompatActivity() {
         }
         showLoading(false) // Hide loading bar
         setupAction()
+
         binding.btnUpload.setOnClickListener { uploadStory() }
     }
+
     private fun setupAction() {
         binding.btnGallery.setOnClickListener { startGallery() }
         binding.btnCamera.setOnClickListener { startCamera() }
-//        binding.uploadButton.setOnClickListener { uploadStory() }
     }
+
     private fun startGallery() {
         launcherGallery.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
@@ -110,7 +113,6 @@ class AddStoryActivity : AppCompatActivity() {
         currentImageUri?.let {
             Log.d("Image URI", "showImage: $it")
             binding.imageView2.setImageURI(it)
-            Toast.makeText(this, "Show image: $it", Toast.LENGTH_SHORT).show()
             Snackbar.make(binding.root, "Image URI: $it", Snackbar.LENGTH_SHORT).show()
         }
     }
@@ -133,20 +135,19 @@ class AddStoryActivity : AppCompatActivity() {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
     private fun toUSerWelcome() {
-        val intent = Intent(this, UserWelcomeActivity::class.java)
+        val intent = Intent(this, StoryActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
     }
 
+    // !this function is used to upload the story and the decsription to the server
     private fun uploadStory() {
         if (currentImageUri == null) {
-          Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
             return
         }
         currentImageUri?.let { uri ->
             val imageFile = uriToFile(uri, this)
-            val descriptionBody = binding.textinput.toString()
-
+            val descriptionBody = binding.Edtdescription.text.toString()
             // Langsung panggil fungsi uploadStoryWithoutLocation
             uploadStoryWithoutLocation(imageFile, descriptionBody, null, null)
         }
@@ -158,18 +159,17 @@ class AddStoryActivity : AppCompatActivity() {
                 when (it) {
                     is ResultSealed.Loading -> {
                         showLoading(true)
-
                     }
                     is ResultSealed.Success -> {
                         showLoading(false)
                         val response = it.data
-                        Toast.makeText(this, response.message, Toast.LENGTH_SHORT).show()
                         Log.d("AddStoryActivity", "uploadStoryWithoutLocation: ${response.message}")
+                        // Redirect to ListStoryActivity
+                        toUSerWelcome()
                         finish()
                     }
                     is ResultSealed.Error -> {
                         showLoading(false)
-                        Toast.makeText(this, it.exception, Toast.LENGTH_SHORT).show()
                         Log.e("AddStoryActivity", "uploadStoryWithoutLocation: ${it.exception}")
                     }
                 }

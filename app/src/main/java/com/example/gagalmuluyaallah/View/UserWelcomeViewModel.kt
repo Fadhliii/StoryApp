@@ -8,11 +8,11 @@ import kotlinx.coroutines.launch
 
 class UserWelcomeViewModel ( //connecting to GeneralRepository and UserPreference
         private val repository: GeneralRepository,
-        private val userPreference: UserPreference
+        private val pref: UserPreference
 ): ViewModel() {
-    fun logoutMainVM(){ //connecting to userpreference.logout
+    fun logout() {
         viewModelScope.launch {
-            userPreference.logout()
+            pref.logout()
         }
     }
 //    !!val stories: LiveData<Result<PagingData<StoryItem>>> by lazy {

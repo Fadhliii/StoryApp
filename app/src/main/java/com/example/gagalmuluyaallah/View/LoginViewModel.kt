@@ -11,10 +11,10 @@ class LoginViewModel(
         private val repository: GeneralRepository,
         private val pref: UserPreference,
 ) : ViewModel() {
-    fun loginViewModel(email: String, password: String) = repository.login(email, password) // not yet to be implemented
+    fun login(email: String, password: String) = repository.login(email, password) // not yet to be implemented
 
     //save login session
-    fun saveLoginViewModel(token: String) { // not yet to be implemented
+    fun saveLoginState(token: String) { // not yet to be implemented
         viewModelScope.launch {
             pref.saveToken(token)
             //generate login

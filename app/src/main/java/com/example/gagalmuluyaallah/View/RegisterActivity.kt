@@ -15,6 +15,9 @@ import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModelProvider
+import com.example.aplikasiku.customView.MyEmailText
+import com.example.aplikasiku.customView.MyNameText
+import com.example.aplikasiku.customView.MyPasswordText
 import com.example.gagalmuluyaallah.R
 import com.example.gagalmuluyaallah.ResultSealed
 import com.example.gagalmuluyaallah.connection.UserPreference
@@ -24,98 +27,53 @@ import com.google.android.material.snackbar.Snackbar
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
+    private lateinit var emailEditText: MyEmailText
+    private lateinit var passwordEditText: MyPasswordText
+    private lateinit var nameEditText: MyNameText
 
     //add datastore
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION_TOKEN)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        emailEditText = findViewById(R.id.emailEditText)
+        passwordEditText = findViewById(R.id.passwordEditText)
+        nameEditText = findViewById(R.id.nameEditText)
+
         showLoading(false)
         setupAction()
     }
 
-
     private fun setupAction() {
-        binding.nameEditText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                if (s.toString().length <= 6) {
-                    binding.nameEditText.error = getString(R.string.empty_name)
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                BackgroundColorSpan(ContextCompat.getColor(this@RegisterActivity, R.color.green))
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                BackgroundColorSpan(ContextCompat.getColor(this@RegisterActivity, R.color.green))
-            }
-
-        })
-
-        binding.emailEditText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                if (!isValidEmail(s.toString())) {
-                    binding.emailEditText.error = getString(R.string.email_invalid)
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                BackgroundColorSpan(ContextCompat.getColor(this@RegisterActivity, R.color.green))
-
-            }
-        })
-
-        binding.passwordEditText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                if (s.toString().length <= 6) {
-                    binding.passwordEditText.error = "Password harus lebih dari 6 karakter"
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-        })
-
         binding.buttonregister.setOnClickListener { setupRegister() }
     }
 
-    // this one is to send the registeer data from user to API database and save it
     private fun setupRegister() {
-        //set alert dialog
         val registerViewModel = getViewModel(this@RegisterActivity)
         val name = binding.nameEditText.text.toString()
         val email = binding.emailEditText.text.toString()
         val password = binding.passwordEditText.text.toString()
+
         when {
-            name.length <= 6     -> {
+            binding.nameEditText.error != null ->{
                 binding.nameEditText.error = getString(R.string.empty_name)
             }
-
-            !isValidEmail(email) -> binding.emailEditText.error = getString(R.string.email_invalid)
-            password.isEmpty()   -> {
+            binding.emailEditText.error != null -> {
+                binding.emailEditText.error = getString(R.string.email_invalid)
+            }
+            binding.passwordEditText.error != null -> {
                 binding.passwordEditText.error = getString(R.string.password_empty)
             }
-
-            password.length <= 6 -> {
-                binding.passwordEditText.error = getString(R.string.password_empty)
-            }
-
-            else                 -> {
+            else -> {
                 registerViewModel.register(name, email, password).observe(this@RegisterActivity) {
-                    if (it != null) { //it is the result from the registerViewModel
+                    if (it != null) {
                         when (it) {
                             is ResultSealed.Loading -> {
-
                                 showLoading(true)
                             }
-
                             is ResultSealed.Success -> {
                                 Log.d("RegisterActivity", "setupRegister: ${it.data}")
                                 showLoading(false)
@@ -126,8 +84,7 @@ class RegisterActivity : AppCompatActivity() {
                                 startActivity(Intent(this, MainActivity::class.java))
                                 finish()
                             }
-
-                            is ResultSealed.Error   -> {
+                            is ResultSealed.Error -> {
                                 showLoading(false)
                                 ToastMessage()
                             }
@@ -135,12 +92,7 @@ class RegisterActivity : AppCompatActivity() {
                     }
                 }
             }
-
         }
-    }
-
-    private fun isValidEmail(email: CharSequence): Boolean {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() //format email validation
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -152,7 +104,7 @@ class RegisterActivity : AppCompatActivity() {
                 activity.application,
                 UserPreference.getInstance(dataStore)
         )
-        return ViewModelProvider(activity, factory).get(RegisterViewModel::class.java) //viewmodelprovider is to get the viewmodel
+        return ViewModelProvider(activity, factory).get(RegisterViewModel::class.java)
     }
 
     private fun ToastMessage() {

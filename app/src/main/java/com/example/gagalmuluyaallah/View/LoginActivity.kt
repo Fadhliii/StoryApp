@@ -4,10 +4,13 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -32,57 +35,57 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         loadingBar(false)
+
         userPreference = UserPreference.getInstance(dataStore)
-        // check if user already login
         lifecycleScope.launch {
             try {
                 userPreference.isLoggedIn().collect { isLoggedIn ->
-                    if (isLoggedIn == true) { // if user already login then go to welcome activity
-                        succesLogin()
+                    if (isLoggedIn == true) {
+                        startActivity(Intent(this@LoginActivity, UserWelcomeActivity::class.java))
+                        finish()
                     } else {
-                        actionLogin()
-                        loadingBar(false)
+                        setupAction()
                     }
                 }
-            } catch (e: Exception) {
-                e.printStackTrace() // if error happen
-                Log.e("LoginActivity", "Error: ${e.message}")
-
             } catch (_: CancellationException) {
-                Log.e("LoginActivity", "Error: CancellationException")
+            } catch (e: Exception) {
+                Log.e("LoginActivity", "Error in collecting user login status", e)
             }
         }
     }
 
     // action login button clicked by user
-    private fun actionLogin() {
-        binding.btnlogin.setOnClickListener {
-            setupLogin()
-//            val email = binding.InputEmail.toString()
-//            val password = binding.InputPassword.text.toString()
-//            if (email.isEmpty() || password.isEmpty()) {
-//                binding.etEmail.error = "Email or Password is empty"
-//                binding.etPassword.error = "Email or Password is empty"
-//                return@setOnClickListener
-//            }
-//            lifecycleScope.launch {
-//                try {
-//                    loadingBar(true)
-//                    val token = userPreference.getToken().first()
-//                    if (token.isNullOrEmpty()) {
-//                        val response = userPreference.saveToken(SESSION_TOKEN)
-//                        Log.d("LoginActivity", "Token: $response")
-//                    }
-//                    userPreference.userLogin(true)
-//                    succesLogin()
-//                } catch (e: Exception) {
-//                    e.printStackTrace()
-//                    Log.e("LoginActivity", "Error: ${e.message}")
-//                } finally {
-//                    loadingBar(false)
-//                }
-            }
+    private fun setupAction() {
+        binding.btnlogin.setOnClickListener { setupLogin() }
+
+        // Adding text change listeners for input fields
+        binding.InputEmail.addTextChangedListener(loginTextWatcher)
+        binding.InputPassword.addTextChangedListener(loginTextWatcher)
+    }
+
+    private val loginTextWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            validateLoginForm()
         }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+    }
+
+    private fun validateLoginForm() {
+        val email = binding.InputEmail.text.toString().trim()
+        val password = binding.InputPassword.text.toString().trim()
+        val isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        val isPasswordValid = password.length > 6
+
+        if (isEmailValid && isPasswordValid) {
+            binding.btnlogin.setBackgroundColor(ContextCompat.getColor(this, R.color.secondary_green))
+            binding.btnlogin.isEnabled = true
+        } else {
+            binding.btnlogin.setBackgroundColor(ContextCompat.getColor(this, R.color.secondary_red))
+            binding.btnlogin.isEnabled = false
+        }
+    }
 
     private fun succesLogin() {
         startActivity(Intent(this, UserWelcomeActivity::class.java))
@@ -91,53 +94,53 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupLogin() {
         val loginViewModel = getViewModel(this@LoginActivity)
-        val email = binding.InputEmail.text.toString() //email
-        val password = binding.InputPassword.text.toString() // password
+
+        val email = binding.InputEmail.text.toString()
+        val password = binding.InputPassword.text.toString()
 
         when {
-            email.isEmpty()    -> {
+            email.isEmpty() -> {
                 binding.InputEmail.error = getString(R.string.empty_email)
             }
-
             password.isEmpty() -> {
-                binding.InputPassword.error = getString(R.string.password_empty)
+                binding.InputPassword.error = getString(R.string.empty_password)
             }
-
-            else               -> {loginViewModel.loginViewModel(email, password).observe(this@LoginActivity){
-                if(it != null){
-                    when(it){
-                        is ResultSealed.Loading ->{
-                            loadingBar(true)
-                        }
-                        is ResultSealed.Success ->{
-                            loadingBar(false)
-                            val response = it.data
-                            loginViewModel.saveLoginViewModel(response.token.toString())
-                            lifecycleScope.launch {
-                                userPreference.saveUserEmail(email)
+            else -> {
+                loginViewModel.login(email, password).observe(this@LoginActivity) {
+                    if (it != null) {
+                        when (it) {
+                            is ResultSealed.Loading -> {
+                                loadingBar(true)
                             }
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                            startActivity(intent)
-                            finish()
-                        }
-                        is ResultSealed.Error   -> {
-                            loadingBar(false)
-                            Log.e("Login error", "Login user error : ${it.exception}")
-                            // Membuat AlertDialog
-                            AlertDialog.Builder(this@LoginActivity).apply {
-                                setTitle("Login Error")
-                                setMessage("Email atau password yang Anda masukkan salah. Silakan coba lagi.")
-                                setPositiveButton("OK") { dialog, _ ->
-                                    dialog.dismiss()
-                                }
-                            }.show()
+                            is ResultSealed.Success -> {
+                                loadingBar(false)
+
+                                val response = it.data
+
+                                loginViewModel.saveLoginState(response.token.toString())
+                                showToast(getString(R.string.successfully_logged_in))
+
+                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                startActivity(intent)
+                                finish()
+                            }
+                            is ResultSealed.Error -> {
+                                loadingBar(false)
+                                Log.e("LoginActivity", "Error: ${it.exception}")
+                                AlertDialog.Builder(this@LoginActivity)
+                                    .setTitle("Login Failed")
+                                    .setMessage("Failed to login. Please check your email and password.")
+                                    .setPositiveButton("OK") { dialog, _ ->
+                                        dialog.dismiss()
+                                    }
+                                    .show()
+
+                            }
                         }
                     }
                 }
             }
-
-            }
-
         }
     }
     private fun getViewModel(activity: AppCompatActivity): LoginViewModel {

@@ -183,6 +183,6 @@ class StoryAdapter : RecyclerView.Adapter<StoryAdapter.ListViewHolder>() {
     }
 
     interface OnItemClickCallback {
-        fun onItemClicked(items: StoryItem)
+        fun onItemClicked(items: StoryItem?)
     }
 }

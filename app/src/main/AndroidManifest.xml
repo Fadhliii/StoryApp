@@ -22,13 +22,13 @@
         android:theme="@style/Theme.Gagalmuluyaallah"
         tools:targetApi="31">
         <activity
+            android:name=".UploadStory.DetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UploadStory.DetailStoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".UploadStory.StoryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".UploadStory.AllStoryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AllStoryActivity"
             android:exported="false" />
         <activity
             android:name=".View.AddStoryActivity"
@@ -52,15 +52,6 @@
             </intent-filter>
         </activity>
 
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

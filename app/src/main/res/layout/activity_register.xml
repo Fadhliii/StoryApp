@@ -9,7 +9,7 @@
     tools:context=".View.RegisterActivity">
 
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.example.gagalmuluyaallah.customView.MyButton
         android:id="@+id/buttonregister"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -23,6 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent" />
+
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -55,7 +56,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:startIconContentDescription="@string/content_description_start_icon">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.example.aplikasiku.customView.MyNameText
             android:id="@+id/nameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,13 +76,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.example.aplikasiku.customView.MyEmailText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:hint="@string/email"
-
             android:inputType="textEmailAddress"
             android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -97,7 +97,7 @@
         app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.example.aplikasiku.customView.MyPasswordText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
