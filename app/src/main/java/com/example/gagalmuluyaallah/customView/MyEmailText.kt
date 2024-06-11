@@ -11,7 +11,7 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.View
 import androidx.appcompat.widget.AppCompatEditText
-
+//test
 class MyEmailText : AppCompatEditText {
 
     constructor(context: Context) : super(context) {
