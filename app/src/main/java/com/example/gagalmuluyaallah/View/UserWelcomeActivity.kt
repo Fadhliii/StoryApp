@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.gagalmuluyaallah.Map.MapsActivity
 import com.example.gagalmuluyaallah.UploadStory.StoryActivity
 import com.example.gagalmuluyaallah.connection.UserPreference
 import com.example.gagalmuluyaallah.connection.ViewModelFactory
@@ -53,6 +54,11 @@ class UserWelcomeActivity : AppCompatActivity() {
 
         binding.btnCheckAllStories.setOnClickListener {
             val intent = Intent(this, StoryActivity ::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnMap.setOnClickListener {
+            val intent = Intent(this, MapsActivity::class.java)
             startActivity(intent)
         }
 

@@ -5,6 +5,7 @@ plugins {
 
     id("kotlin-kapt")
     id("kotlin-parcelize")
+    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 
 }
 
@@ -55,6 +56,7 @@ dependencies {
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
