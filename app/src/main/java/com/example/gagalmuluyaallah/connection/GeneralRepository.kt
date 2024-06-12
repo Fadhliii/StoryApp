@@ -145,6 +145,28 @@ class GeneralRepository private constructor(
 
     }
 
+    fun getStoriesWithLocation(): LiveData<ResultSealed<List<StoryItem>>> = liveData {
+        emit(ResultSealed.Loading)
+        try {
+            val token = getToken()
+            apiService = ApiConfig.getApiService((token.toString()))
+
+            val response = apiService.getStoriesWithLocation()
+            val storyItem = response.listStory
+
+            emit(ResultSealed.Success(storyItem))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, StoriesResponse::class.java)
+
+            emit(ResultSealed.Error(errorResponse.message.toString()))
+        } catch (e: Exception) {
+            Log.e("GeneralRepository", "Location stories : ${e.message}")
+
+            emit(ResultSealed.Error(e.message.toString()))
+        }
+    }
+
     companion object {
         //set instance to GeneralRepository
         private var instance: GeneralRepository? = null

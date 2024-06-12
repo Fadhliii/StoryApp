@@ -3,6 +3,7 @@ package com.example.gagalmuluyaallah.connection
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.gagalmuluyaallah.Map.MapsViewModel
 //import com.example.gagalmuluyaallah.UploadStory.AllStoryViewModel
 import com.example.gagalmuluyaallah.UploadStory.StoryViewModel
 import com.example.gagalmuluyaallah.View.AddStoryViewModel
@@ -33,7 +34,10 @@ class ViewModelFactory(
             modelClass.isAssignableFrom(StoryViewModel::class.java) -> {
                 return StoryViewModel(repository) as T
             }
-            else                                                       -> throw IllegalArgumentException("Unknown / invalid VM class : " + modelClass.name)
+            modelClass.isAssignableFrom(MapsViewModel::class.java)  -> {
+                return MapsViewModel(repository) as T
+            }
+            else                                                    -> throw IllegalArgumentException("Unknown / invalid VM class : " + modelClass.name)
         }
     }
 

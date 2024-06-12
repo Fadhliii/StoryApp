@@ -15,6 +15,14 @@ import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface ApiService {
+
+    @GET("stories")
+    suspend fun getStoriesWithLocation(
+            @Query("page") page: Int = 1,
+            @Query("size") size: Int = 25,
+            @Query("location") location: Int = 1,
+    ): StoriesResponse
+
     @FormUrlEncoded
     @POST("register")
     suspend fun register(
@@ -42,7 +50,7 @@ interface ApiService {
     @GET("stories")
     suspend fun getStories(
             @Query("page") page: Int = 1,
-            @Query("size") size: Int = 25
+            @Query("size") size: Int = 25,
     ): StoriesResponse
 
 

@@ -32,7 +32,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var nameEditText: MyNameText
 
     //add datastore
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION_TOKEN)
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,6 +112,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     companion object {
-        var SESSION_TOKEN = "SESSION_TOKEN"
+        const val SESSION = "session"
     }
 }
