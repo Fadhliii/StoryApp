@@ -2,6 +2,7 @@ package com.example.gagalmuluyaallah.Map
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.gagalmuluyaallah.databinding.ActivityMapsBinding
 import com.example.gagalmuluyaallah.model.dataStore
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLngBounds
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -34,7 +36,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mapsViewModel: MapsViewModel
     private lateinit var mMap: GoogleMap
     private val boundsBuilder = LatLngBounds.Builder()
-            private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(RegisterActivity.SESSION)
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(RegisterActivity.SESSION)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +49,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        requestPermissionLauncher
-        getUserLocation()
-        setupStoryMarkers()
 
+        setupStoryMarkers()
     }
 
     private fun setupStoryMarkers() {
@@ -60,6 +60,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     is ResultSealed.Loading -> {
                         showLoading(true)
                     }
+
                     is ResultSealed.Success -> {
                         showLoading(false)
 
@@ -75,19 +76,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                                 )
                                 boundsBuilder.include(latLng)
                             }
-
-                            val bounds: LatLngBounds = boundsBuilder.build()
-                            mMap.animateCamera(
-                                    CameraUpdateFactory.newLatLngBounds(
-                                            bounds,
-                                            resources.displayMetrics.widthPixels,
-                                            resources.displayMetrics.heightPixels,
-                                            300
-                                    )
-                            )
                         }
+
+                        val bounds: LatLngBounds = boundsBuilder.build()
+                        mMap.animateCamera(
+                                CameraUpdateFactory.newLatLngBounds(
+                                        bounds,
+                                        resources.displayMetrics.widthPixels,
+                                        resources.displayMetrics.heightPixels,
+                                        300
+                                )
+                        )
                     }
-                    is ResultSealed.Error   -> {
+
+                    is ResultSealed.Error -> {
                         showLoading(false)
                         Log.e("MapsActivity", "Error: ${it.exception}")
                     }
@@ -97,13 +99,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun getViewModel(activity: AppCompatActivity): MapsViewModel {
-
         val factory = ViewModelFactory.getInstance(
                 activity.application,
                 UserPreference.getInstance(dataStore)
         )
         return ViewModelProvider(activity, factory)[MapsViewModel::class.java]
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -112,6 +112,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.uiSettings.isIndoorLevelPickerEnabled = true
         mMap.uiSettings.isCompassEnabled = true
         mMap.uiSettings.isMapToolbarEnabled = true
+
+        getUserLocation()
     }
 
     private val requestPermissionLauncher =
@@ -120,6 +122,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             ) { isGranted: Boolean ->
                 if (isGranted) {
                     getUserLocation()
+                } else {
+                    Log.e("MapsActivity", "Permission denied")
                 }
             }
 
@@ -130,8 +134,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             mMap.isMyLocationEnabled = true
-        }
-        else {
+
+            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    if (location != null) {
+                        val userLatLng = LatLng(location.latitude, location.longitude)
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(userLatLng)) // Move the camera immediately to the user location
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(15f)) // Animate the zoom process
+                    } else {
+                        Log.e("MapsActivity", "Location is null")
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.e("MapsActivity", "Error getting user location: ${e.message}")
+                }
+
+        } else {
             requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
@@ -140,9 +159,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-
     companion object {
-        //TODO
+        //TODO("masih binggung biar ngecall getuserlocationnya biar ga double")
     }
-
 }
