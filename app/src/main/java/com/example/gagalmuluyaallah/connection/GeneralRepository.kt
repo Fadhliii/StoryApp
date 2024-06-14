@@ -5,9 +5,14 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.dicoding.picodiploma.mycamera.reduceFileImage
 import com.example.gagalmuluyaallah.ResultSealed
+import com.example.gagalmuluyaallah.local.StoryDatabase
+import com.example.gagalmuluyaallah.local.StoryRemoteMediator
 import com.example.gagalmuluyaallah.model.ApiConfig
 import com.example.gagalmuluyaallah.model.ApiService
 import com.example.gagalmuluyaallah.response.GeneralResponse
@@ -29,6 +34,7 @@ import java.io.File
 class GeneralRepository private constructor(
         private var apiService: ApiService,
         private val userPreference: UserPreference,
+        private val storyDatabase: StoryDatabase,
 ) {
     // set token variable
     private var token: String? = null
@@ -123,27 +129,38 @@ class GeneralRepository private constructor(
         }
     }
 
+
     @OptIn(ExperimentalPagingApi::class)
-    fun getAllStories(ViewModelScope: CoroutineScope): LiveData<ResultSealed<List<StoryItem>>> = liveData {
+    fun getAllStories(coroutineScope: CoroutineScope): LiveData<ResultSealed<PagingData<StoryItem>>> = liveData {
         emit(ResultSealed.Loading)
         try {
             val token = getToken()
             apiService = ApiConfig.getApiService(token.toString())
 
-            val response = apiService.getStories()
-            emit(ResultSealed.Success(response.listStory))
-        } catch (e: HttpException) {
+            val pager = Pager(
+                    config = PagingConfig(
+                            pageSize = 5
+                    ),
+                    remoteMediator = StoryRemoteMediator(storyDatabase, apiService),
+                    pagingSourceFactory = {
+                        storyDatabase.storyDao().getAllStory()
+                    }
+            )
 
+            val pagingDataFlow = pager.flow.cachedIn(coroutineScope)
+            pagingDataFlow.collect {
+                emit(ResultSealed.Success(it))
+            }
+        } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, StoriesResponse::class.java)
-
             emit(ResultSealed.Error(errorResponse.message.toString()))
         } catch (e: Exception) {
             Log.e("GeneralRepository", "getAllStories: ${e.message}")
             emit(ResultSealed.Error(e.message.toString()))
         }
-
     }
+
 
     fun getStoriesWithLocation(): LiveData<ResultSealed<List<StoryItem>>> = liveData {
         emit(ResultSealed.Loading)
@@ -176,9 +193,10 @@ class GeneralRepository private constructor(
                 // instance for api and userpreference to save the token
                 apiService: ApiService, //from ApiService
                 userPreference: UserPreference,
+                storyDatabase: StoryDatabase,
         ): GeneralRepository {
             return instance ?: synchronized(this) {
-                instance ?: GeneralRepository(apiService, userPreference).also { instance = it }
+                instance ?: GeneralRepository(apiService, userPreference, storyDatabase).also { instance = it }
             }
         }
     }

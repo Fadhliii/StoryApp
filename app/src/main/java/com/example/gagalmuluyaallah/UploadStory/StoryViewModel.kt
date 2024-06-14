@@ -11,7 +11,7 @@ import com.example.gagalmuluyaallah.response.StoryItem
 class StoryViewModel(
         private val repository: GeneralRepository,
 ) : ViewModel() {
-    val stories: LiveData<ResultSealed<List<StoryItem>>> by lazy {
+    val stories: LiveData<ResultSealed<PagingData<StoryItem>>> by lazy {
         repository.getAllStories(viewModelScope)
     }
 

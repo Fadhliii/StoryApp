@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.gagalmuluyaallah.connection.GeneralRepository
 import com.example.gagalmuluyaallah.connection.UserPreference
+import com.example.gagalmuluyaallah.local.StoryDatabase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -17,6 +18,8 @@ object Injection {
         val pref = UserPreference.getInstance(context.dataStore)
         val token = runBlocking { pref.getToken().first() }
         val apiService = ApiConfig.getApiService(token.toString())
-        return GeneralRepository.getInstance(apiService, pref)
+
+        val storyDatabase = StoryDatabase.getDatabase(context)
+        return GeneralRepository.getInstance(apiService, pref, storyDatabase)
     }
 }

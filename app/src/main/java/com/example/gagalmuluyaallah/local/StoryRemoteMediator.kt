@@ -29,7 +29,7 @@ class StoryRemoteMediator(
                         ?: return MediatorResult.Success(remoteKeys != null)
                 prevKey
             }
-            LoadType.APPEND  -> {
+            LoadType.APPEND -> {
                 val remoteKeys = getRemoteKeyForLastItem(state)
                 val nextKey = remoteKeys?.nextKey
                         ?: return MediatorResult.Success(remoteKeys != null)

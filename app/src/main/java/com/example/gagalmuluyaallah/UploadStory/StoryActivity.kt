@@ -26,8 +26,6 @@ import kotlinx.coroutines.launch
 
 class StoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStoryBinding
-    private val adapter by lazy { StoryAdapter() }
-    private var repository = GeneralRepository
     private lateinit var viewModel: StoryViewModel
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
 
@@ -41,11 +39,15 @@ class StoryActivity : AppCompatActivity() {
 
     private fun setupStory() {
         val storyAdapter = StoryAdapter()
-        binding.rvStories.layoutManager = LinearLayoutManager(this)
-        binding.rvStories.adapter = storyAdapter
-        binding.rvStories.setHasFixedSize(true)
 
-        // Set up the click listener for each story item.
+        binding.rvStories.layoutManager = LinearLayoutManager(this@StoryActivity)
+        binding.rvStories.adapter = storyAdapter
+        storyAdapter.withLoadStateFooter(
+                footer = LoadingStateAdapter {
+                    storyAdapter.retry()
+                }
+        )
+        // this one is for detail activity navigation when item clicked in recyclerview list
         storyAdapter.setOnItemClickCallback(object : StoryAdapter.OnItemClickCallback {
             override fun onItemClicked(items: StoryItem?) {
                 val intent = Intent(this@StoryActivity, DetailActivity::class.java)
@@ -54,22 +56,21 @@ class StoryActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         })
-
-        // Observe the stories LiveData from the ViewModel.
         viewModel.stories.observe(this) {
-            when (it) {
-                is ResultSealed.Loading -> {
-                    showLoading(true)
-                }
-                is ResultSealed.Success -> {
-                    showLoading(false)
-                    val response = it.data
-                    storyAdapter.setData(response)
-                    Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
-                }
-                is ResultSealed.Error -> {
-                    showLoading(false)
-                    Log.e("StoryActivity Error", "Error: ${it.exception}")
+            if (it != null) {
+                when (it) {
+                    is ResultSealed.Loading -> {
+                        showLoading(true)
+                    }
+                    is ResultSealed.Success -> {
+                        showLoading(false)
+
+                        val response = it.data
+                        storyAdapter.submitData(lifecycle, response)
+                    }
+                    is ResultSealed.Error -> {
+                        showLoading(false)
+                    }
                 }
             }
         }
@@ -87,11 +88,14 @@ class StoryActivity : AppCompatActivity() {
         binding.progressBar2.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.stories
+    }
+
     companion object {
         const val SESSION = "session"
     }
 }
-
-
 
 

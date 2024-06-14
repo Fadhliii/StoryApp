@@ -1,8 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-//    parcelize
-
     id("kotlin-kapt")
     id("kotlin-parcelize")
     alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
@@ -39,6 +37,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+        freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
 }
 
@@ -51,10 +50,9 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.datastore.core.android)
     implementation(libs.androidx.datastore.preferences.core.jvm)
-    implementation ("androidx.datastore:datastore-preferences:1.1.1")
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.exifinterface)
-    implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.androidx.room.ktx)
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
@@ -91,14 +89,15 @@ dependencies {
     implementation("io.coil-kt:coil:1.4.0")
     //coil image
     implementation("io.coil-kt:coil:1.4.0")
-    implementation ("com.github.bumptech.glide:glide:4.12.0")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
     //paging3
-    implementation("androidx.paging:paging-runtime-ktx:3.1.0")
-    implementation("androidx.paging:paging-compose:1.0.0-alpha08")
-    implementation("androidx.room:room-paging:2.6.1")
-    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.room.paging)
+    implementation(libs.androidx.paging.runtime.ktx)
+    kapt("androidx.room:room-compiler:2.6.1")
+
+
     //testing
     androidTestImplementation("androidx.arch.core:core-testing:2.2.0") //InstantTaskExecutorRule
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3") //TestDispatcher
@@ -107,5 +106,11 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3") //TestDispatcher
     testImplementation("org.mockito:mockito-core:5.6.0")
     testImplementation("org.mockito:mockito-inline:5.2.0")
+    //livedata
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0-alpha03")
+    implementation("androidx.lifecycle:lifecycle-livedata-core-ktx:2.4.0-alpha03")
+    //datastore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
 
 }

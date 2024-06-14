@@ -10,6 +10,7 @@ import com.example.gagalmuluyaallah.response.StoryItem
 @Dao
 interface StoryDao {
 
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStory(story: List<StoryItem>)
 
