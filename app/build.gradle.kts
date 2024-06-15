@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
+    implementation(libs.androidx.espresso.idling.resource)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -111,6 +112,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-core-ktx:2.4.0-alpha03")
     //datastore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
 
 
 }
