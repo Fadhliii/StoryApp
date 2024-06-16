@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.gagalmuluyaallah.databinding.ActivityMapsBinding
 import com.example.gagalmuluyaallah.model.dataStore
+import com.example.gagalmuluyaallah.response.StoryItem
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLngBounds
 
@@ -55,48 +56,50 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun setupStoryMarkers() {
         mapsViewModel.getStoriesWithLocation().observe(this) {
-            if (it != null) {
-                when (it) {
-                    is ResultSealed.Loading -> {
-                        showLoading(true)
-                    }
-
+            it?.let { result ->
+                when (result) {
+                    is ResultSealed.Loading -> showLoading(true)
                     is ResultSealed.Success -> {
                         showLoading(false)
-
-                        val response = it.data
-                        response.forEach { data ->
-                            if (data.lat != null && data.lon != null) {
-                                val latLng = LatLng(data.lat, data.lon)
-                                mMap.addMarker(
-                                        MarkerOptions()
-                                            .position(latLng)
-                                            .title(data.name)
-                                            .snippet(data.description)
-                                )
-                                boundsBuilder.include(latLng)
-                            }
-                        }
-
-                        val bounds: LatLngBounds = boundsBuilder.build()
-                        mMap.animateCamera(
-                                CameraUpdateFactory.newLatLngBounds(
-                                        bounds,
-                                        resources.displayMetrics.widthPixels,
-                                        resources.displayMetrics.heightPixels,
-                                        300
-                                )
-                        )
+                        addMarkers(result.data)
+                        adjustCamera()
                     }
-
                     is ResultSealed.Error -> {
                         showLoading(false)
-                        Log.e("MapsActivity", "Error: ${it.exception}")
+                        Log.e("MapsActivity", "Error: ${result.exception}")
                     }
                 }
             }
         }
     }
+
+    private fun addMarkers(response: List<StoryItem>) {
+        response.forEach { data ->
+            if (data.lat != null && data.lon != null) {
+                val latLng = LatLng(data.lat, data.lon)
+                mMap.addMarker(
+                        MarkerOptions()
+                            .position(latLng)
+                            .title(data.name)
+                            .snippet(data.description)
+                )
+                boundsBuilder.include(latLng)
+            }
+        }
+    }
+
+    private fun adjustCamera() {
+        val bounds: LatLngBounds = boundsBuilder.build()
+        mMap.animateCamera(
+                CameraUpdateFactory.newLatLngBounds(
+                        bounds,
+                        resources.displayMetrics.widthPixels,
+                        resources.displayMetrics.heightPixels,
+                        300
+                )
+        )
+    }
+
 
     private fun getViewModel(activity: AppCompatActivity): MapsViewModel {
         val factory = ViewModelFactory.getInstance(
@@ -116,6 +119,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         getUserLocation()
     }
 
+    //! Request permission
     private val requestPermissionLauncher =
             registerForActivityResult(
                     ActivityResultContracts.RequestPermission()
@@ -134,7 +138,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             mMap.isMyLocationEnabled = true
-
+            // ! Get the user's location and move the camera to that location when the map is ready to be used by the user
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location: Location? ->
@@ -160,6 +164,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     companion object {
-        //TODO("masih binggung biar ngecall getuserlocationnya biar ga double")
+        //TODO("ketik 1 jika kamu ingin sukses")
     }
 }

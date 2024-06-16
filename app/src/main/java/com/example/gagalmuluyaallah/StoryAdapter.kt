@@ -28,6 +28,15 @@ class StoryAdapter : PagingDataAdapter<StoryItem, StoryAdapter.ListViewHolder>(D
         return ListViewHolder(binding)
     }
 
+    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
+        this.onItemClickCallback = onItemClickCallback
+    }
+
+    interface OnItemClickCallback {
+        fun onItemClicked(items: StoryItem?)
+    }
+
+
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val storyItem = getItem(position)
         if (storyItem != null) {
@@ -53,13 +62,6 @@ class StoryAdapter : PagingDataAdapter<StoryItem, StoryAdapter.ListViewHolder>(D
         }
     }
 
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
-    }
-
-    interface OnItemClickCallback {
-        fun onItemClicked(items: StoryItem?)
-    }
 
     companion object {
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<StoryItem>() {

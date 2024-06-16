@@ -35,13 +35,15 @@ class StoryViewModelTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @get:Rule
     val mainDispatcherRules = MainDispatcherRule()
 
     @Mock
     private lateinit var repository: GeneralRepository
-    @Mock
-    private lateinit var mainViewModel: StoryViewModel
+
+    // Hapus anotasi @Mock untuk StoryViewModel
+    private lateinit var StoryViewModelTesting: StoryViewModel
 
     private lateinit var logMock: MockedStatic<Log>
 
@@ -50,7 +52,8 @@ class StoryViewModelTest {
         logMock = Mockito.mockStatic(Log::class.java)
         logMock.`when`<Boolean> { Log.isLoggable(Mockito.anyString(), Mockito.anyInt()) }.thenReturn(true)
 
-        mainViewModel = StoryViewModel(repository)
+        // Inisialisasi StoryViewModel dengan objek asli, melewatkan repository yang dimocking
+        StoryViewModelTesting = StoryViewModel(repository)
     }
 
     @After
@@ -66,9 +69,9 @@ class StoryViewModelTest {
         val expectedStory = MutableLiveData<ResultSealed<PagingData<StoryItem>>>()
         expectedStory.value = ResultSealed.Success(data)
 
-        Mockito.`when`(repository.getAllStories(mainViewModel.viewModelScope)).thenReturn(expectedStory)
+        Mockito.`when`(repository.getAllStories(StoryViewModelTesting.viewModelScope)).thenReturn(expectedStory)
 
-        val actualStory = mainViewModel.stories.getOrAwaitValue()
+        val actualStory = StoryViewModelTesting.stories.getOrAwaitValue()
         val response = (actualStory as ResultSealed.Success).data
 
         val differ = AsyncPagingDataDiffer(
@@ -90,9 +93,9 @@ class StoryViewModelTest {
         val expectedStory = MutableLiveData<ResultSealed<PagingData<StoryItem>>>()
         expectedStory.value = ResultSealed.Success(data)
 
-        Mockito.`when`(repository.getAllStories(mainViewModel.viewModelScope)).thenReturn(expectedStory)
+        Mockito.`when`(repository.getAllStories(StoryViewModelTesting.viewModelScope)).thenReturn(expectedStory)
 
-        val actualStory = mainViewModel.stories.getOrAwaitValue()
+        val actualStory = StoryViewModelTesting.stories.getOrAwaitValue()
         val response = (actualStory as ResultSealed.Success).data
 
         val differ = AsyncPagingDataDiffer(
@@ -104,5 +107,4 @@ class StoryViewModelTest {
 
         assertEquals(0, differ.snapshot().size)
     }
-
 }

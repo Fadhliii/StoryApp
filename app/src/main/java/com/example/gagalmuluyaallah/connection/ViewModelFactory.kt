@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.gagalmuluyaallah.Map.MapsViewModel
-//import com.example.gagalmuluyaallah.UploadStory.AllStoryViewModel
 import com.example.gagalmuluyaallah.UploadStory.StoryViewModel
 import com.example.gagalmuluyaallah.View.AddStoryViewModel
 import com.example.gagalmuluyaallah.View.LoginViewModel

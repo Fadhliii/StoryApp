@@ -22,12 +22,14 @@ import com.example.gagalmuluyaallah.connection.ViewModelFactory
 import com.example.gagalmuluyaallah.databinding.ActivityStoryBinding
 import com.example.gagalmuluyaallah.model.dataStore
 import com.example.gagalmuluyaallah.response.StoryItem
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 class StoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStoryBinding
     private lateinit var viewModel: StoryViewModel
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(SESSION)
+    private var isSnackbarShown = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +66,10 @@ class StoryActivity : AppCompatActivity() {
                     }
                     is ResultSealed.Success -> {
                         showLoading(false)
-
+                        if (!isSnackbarShown) {
+                            Snackbar.make(binding.root, "Welcome ", Snackbar.LENGTH_SHORT).show()
+                            isSnackbarShown = true
+                        }
                         val response = it.data
                         storyAdapter.submitData(lifecycle, response)
                     }
@@ -87,6 +92,7 @@ class StoryActivity : AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar2.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
+
 
     override fun onResume() {
         super.onResume()

@@ -39,18 +39,12 @@ class GeneralRepository private constructor(
     // set token variable
     private var token: String? = null
 
-    // get token from user preference
-    //the method is called suspend because its need to wait until the token is ready
-    // so it can run in the background
     private suspend fun getToken(): String? = token ?: runBlocking {
         userPreference.getToken().first()
     }.also { token = it }
 
 
-    // this function is to send the register user to dicoding API Database.
-    //@PARAM name
-    //@PARAM email
-    //@Param password
+    // ! Register function
     fun register(name: String, email: String, password: String): LiveData<ResultSealed<GeneralResponse>> = liveData {
         emit(ResultSealed.Loading)
         Log.d("GeneralRepository", "register: $name, $email, $password")
@@ -78,6 +72,7 @@ class GeneralRepository private constructor(
         }
     }
 
+    // ! Login function
     fun login(email: String, password: String): LiveData<ResultSealed<LoginResult>> = liveData {
         emit(ResultSealed.Loading)
         try {
@@ -100,6 +95,7 @@ class GeneralRepository private constructor(
         }
     }
 
+    //! Upload new story function
     fun uploadNewStory(file: File?, description: String, lat: Double?, lon: Double?): LiveData<ResultSealed<GeneralResponse>> = liveData {
         emit(ResultSealed.Loading)
         try {
@@ -130,6 +126,7 @@ class GeneralRepository private constructor(
     }
 
 
+    // ! Get all stories function
     @OptIn(ExperimentalPagingApi::class)
     fun getAllStories(coroutineScope: CoroutineScope): LiveData<ResultSealed<PagingData<StoryItem>>> = liveData {
         emit(ResultSealed.Loading)
@@ -162,6 +159,7 @@ class GeneralRepository private constructor(
     }
 
 
+// ! Get stories with location function
     fun getStoriesWithLocation(): LiveData<ResultSealed<List<StoryItem>>> = liveData {
         emit(ResultSealed.Loading)
         try {

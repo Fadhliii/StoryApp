@@ -11,25 +11,27 @@ import com.example.gagalmuluyaallah.response.StoryItem
 @OptIn(ExperimentalPagingApi::class)
 class StoryRemoteMediator(
         private val storyDatabase: StoryDatabase,
-        private val apiService: ApiService
+        private val apiService: ApiService,
 ) : RemoteMediator<Int, StoryItem>() {
 
     override suspend fun load(
             loadType: LoadType,
-            state: PagingState<Int, StoryItem>
+            state: PagingState<Int, StoryItem>,
     ): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH -> {
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
                 remoteKeys?.nextKey?.minus(1) ?: INITIAL_PAGE_INDEX
             }
+
             LoadType.PREPEND -> {
                 val remoteKeys = getRemoteKeyForFirstItem(state)
                 val prevKey = remoteKeys?.prevKey
                         ?: return MediatorResult.Success(remoteKeys != null)
                 prevKey
             }
-            LoadType.APPEND -> {
+
+            LoadType.APPEND  -> {
                 val remoteKeys = getRemoteKeyForLastItem(state)
                 val nextKey = remoteKeys?.nextKey
                         ?: return MediatorResult.Success(remoteKeys != null)
@@ -91,5 +93,4 @@ class StoryRemoteMediator(
     private companion object {
         const val INITIAL_PAGE_INDEX = 1
     }
-
 }

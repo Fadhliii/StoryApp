@@ -16,6 +16,7 @@ import retrofit2.http.Query
 
 interface ApiService {
 
+    // ! Get stories with location
     @GET("stories")
     suspend fun getStoriesWithLocation(
             @Query("page") page: Int = 1,
@@ -23,6 +24,7 @@ interface ApiService {
             @Query("location") location: Int = 1,
     ): StoriesResponse
 
+    // ! Register function
     @FormUrlEncoded
     @POST("register")
     suspend fun register(
@@ -31,6 +33,7 @@ interface ApiService {
             @Field("password") password: String,
     ): GeneralResponse
 
+    // ! Login function
     @FormUrlEncoded
     @POST("login")
     suspend fun login(
@@ -38,6 +41,8 @@ interface ApiService {
             @Field("password") password: String,
     ): LoginResponse
 
+
+    // ! Add new story
     @Multipart
     @POST("stories")
     suspend fun addNewStory(
@@ -47,6 +52,7 @@ interface ApiService {
             @Part("lon") lon: Double?,
     ): GeneralResponse
 
+    // ! Get stories List function
     @GET("stories")
     suspend fun getStories(
             @Query("page") page: Int = 1,
