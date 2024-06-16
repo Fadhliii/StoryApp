@@ -3,7 +3,6 @@ package com.example.gagalmuluyaallah.model
 import com.example.gagalmuluyaallah.response.GeneralResponse
 import com.example.gagalmuluyaallah.response.LoginResponse
 import com.example.gagalmuluyaallah.response.StoriesResponse
-import com.example.gagalmuluyaallah.response.StoryItem
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Field

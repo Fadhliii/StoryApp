@@ -7,23 +7,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gagalmuluyaallah.ResultSealed
-import com.example.gagalmuluyaallah.connection.GeneralRepository
 import com.example.gagalmuluyaallah.connection.UserPreference
 import com.example.gagalmuluyaallah.connection.ViewModelFactory
 import com.example.gagalmuluyaallah.databinding.ActivityStoryBinding
-import com.example.gagalmuluyaallah.model.dataStore
-import com.example.gagalmuluyaallah.response.StoryItem
+import com.example.gagalmuluyaallah.response.StoriesItemsResponse
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.launch
 
 class StoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStoryBinding
@@ -51,7 +46,7 @@ class StoryActivity : AppCompatActivity() {
         )
         // this one is for detail activity navigation when item clicked in recyclerview list
         storyAdapter.setOnItemClickCallback(object : StoryAdapter.OnItemClickCallback {
-            override fun onItemClicked(items: StoryItem?) {
+            override fun onItemClicked(items: StoriesItemsResponse?) {
                 val intent = Intent(this@StoryActivity, DetailActivity::class.java)
                 intent.putExtra(DetailActivity.ARG_STORY_ITEM, items)
                 Log.e("StoryActivity", "Navigating to DetailActivity with StoryItem: ${items?.id}")

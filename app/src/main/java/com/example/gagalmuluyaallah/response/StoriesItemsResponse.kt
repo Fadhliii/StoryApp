@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "story")
-data class      StoryItem(
+data class      StoriesItemsResponse(
 
         @PrimaryKey
         @field:SerializedName("id")

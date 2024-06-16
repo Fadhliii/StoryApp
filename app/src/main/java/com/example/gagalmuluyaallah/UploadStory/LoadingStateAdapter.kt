@@ -13,20 +13,19 @@ class LoadingStateAdapter(private val retry: () -> Unit) : LoadStateAdapter<Load
     override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState) =
             LoadingStateViewHolder(ItemLoadingBinding.inflate(LayoutInflater.from(parent.context), parent, false), retry)
 
-    override fun onBindViewHolder(holder: LoadingStateViewHolder, loadState: LoadState) = holder.bind(loadState)
+    override fun onBindViewHolder(holder: LoadingStateViewHolder, loadState: LoadState) {
+        holder.binding.apply {
+            errorMessage.text = if (loadState is LoadState.Error) loadState.error.localizedMessage else ""
+            progressBar.isVisible = loadState is LoadState.Loading
+            retryButton.isVisible = loadState is LoadState.Error
+            errorMessage.isVisible = loadState is LoadState.Error
+        }
+    }
 
-    class LoadingStateViewHolder(private val binding: ItemLoadingBinding, retry: () -> Unit) :
+    class LoadingStateViewHolder(val binding: ItemLoadingBinding, retry: () -> Unit) :
             RecyclerView.ViewHolder(binding.root) {
         init {
             binding.retryButton.setOnClickListener { retry() }
-        }
-        fun bind(loadState: LoadState) {
-            binding.apply {
-                errorMessage.text = if (loadState is LoadState.Error) loadState.error.localizedMessage else ""
-                progressBar.isVisible = loadState is LoadState.Loading
-                retryButton.isVisible = loadState is LoadState.Error
-                errorMessage.isVisible = loadState is LoadState.Error
-            }
         }
     }
 }

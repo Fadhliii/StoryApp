@@ -26,8 +26,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.gagalmuluyaallah.databinding.ActivityMapsBinding
-import com.example.gagalmuluyaallah.model.dataStore
-import com.example.gagalmuluyaallah.response.StoryItem
+import com.example.gagalmuluyaallah.response.StoriesItemsResponse
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLngBounds
 
@@ -73,7 +72,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun addMarkers(response: List<StoryItem>) {
+    private fun addMarkers(response: List<StoriesItemsResponse>) {
         response.forEach { data ->
             if (data.lat != null && data.lon != null) {
                 val latLng = LatLng(data.lat, data.lon)

@@ -11,10 +11,9 @@ import com.example.gagalmuluyaallah.MainDispatcherRule
 import com.example.gagalmuluyaallah.ResultSealed
 import com.example.gagalmuluyaallah.StoryPagingSource
 import com.example.gagalmuluyaallah.connection.GeneralRepository
-import com.example.gagalmuluyaallah.connection.UserPreference
 import com.example.gagalmuluyaallah.getOrAwaitValue
 import com.example.gagalmuluyaallah.noopListUpdateCallback
-import com.example.gagalmuluyaallah.response.StoryItem
+import com.example.gagalmuluyaallah.response.StoriesItemsResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -64,9 +63,9 @@ class StoryViewModelTest {
     @Test
     fun `when Get Story Should Not Null and Return Data`() = runTest {
         val dummyQuote = DataDummy.generateDummyStoryResponse()
-        val data: PagingData<StoryItem> = StoryPagingSource.snapshot(dummyQuote)
+        val data: PagingData<StoriesItemsResponse> = StoryPagingSource.snapshot(dummyQuote)
 
-        val expectedStory = MutableLiveData<ResultSealed<PagingData<StoryItem>>>()
+        val expectedStory = MutableLiveData<ResultSealed<PagingData<StoriesItemsResponse>>>()
         expectedStory.value = ResultSealed.Success(data)
 
         Mockito.`when`(repository.getAllStories(StoryViewModelTesting.viewModelScope)).thenReturn(expectedStory)
@@ -88,9 +87,9 @@ class StoryViewModelTest {
 
     @Test
     fun `when Get Story Empty Should Return No Data`() = runTest {
-        val data: PagingData<StoryItem> = PagingData.from(emptyList())
+        val data: PagingData<StoriesItemsResponse> = PagingData.from(emptyList())
 
-        val expectedStory = MutableLiveData<ResultSealed<PagingData<StoryItem>>>()
+        val expectedStory = MutableLiveData<ResultSealed<PagingData<StoriesItemsResponse>>>()
         expectedStory.value = ResultSealed.Success(data)
 
         Mockito.`when`(repository.getAllStories(StoryViewModelTesting.viewModelScope)).thenReturn(expectedStory)
